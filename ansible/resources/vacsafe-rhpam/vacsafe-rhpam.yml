@@ -59,9 +59,9 @@ items:
               value: "{{ vacsafe_rhpam_gc_max_metaspace_size }}"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.namespace
+                secretKeyRef:
+                  name: v1
+                  key: changeme
             - name: SPRING_CONFIG_LOCATION
               value: file:///deployments/config/{{ application_configmap_key }}
 
@@ -72,6 +72,16 @@ items:
 
             - name: MAVEN_MIRROR_URL
               value: "{{ nexus_mirror }}"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: password
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mysecret
+                  key: password
             imagePullPolicy: IfNotPresent
             name: {{ application_name }}
             livenessProbe:

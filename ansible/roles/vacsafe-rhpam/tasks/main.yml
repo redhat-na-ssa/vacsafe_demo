@@ -78,6 +78,15 @@
 ###########################################################
 
 
+########    S3 Secret   #########
+
+- name: "copy RHPDS S3 secret to this namespace"
+  shell: "{{ openshift_cli }} get secret aws-creds --namespace=kube-system -o yaml | sed 's/namespace: .*/namespace: default/' | {{ openshift_cli }} apply -f -"
+
+
+#################################
+
+
 ########    RH-PAM Server    #############
 - name: create {{ service_account }} service account for {{ application_name }} application
   oc_serviceaccount:
