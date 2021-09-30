@@ -1,0 +1,33 @@
+= Vaccine Safe Demo
+
+== Purpose
+
+=== Technical Discussion Vectors
+
+== Architecture
+
+== Deploy to OpenShift
+
+== Demo Components
+
+== Demo Scenario
+
+== Local Containerized environment
+
+== Test
+
+. Test
++
+-----
+$ mvn clean test \
+     -Daws.accessKeyId=$AWS_ACCESS_KEY_ID \
+     -Daws.secretAccessKey=$AWS_SECRET_ACCESS_KEY
+-----
+
+== Development
+
+== Reference
+
+== Bug List
+
+== Operator Notes
