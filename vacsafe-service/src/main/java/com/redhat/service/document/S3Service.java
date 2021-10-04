@@ -1,4 +1,4 @@
-package com.redhat.service;
+package com.redhat.service.document;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 import software.amazon.awssdk.services.s3.model.CreateBucketResponse;
 
 @Component("S3Service")
-public class S3Service {
+public class S3Service implements IDocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(S3Service.class);
 

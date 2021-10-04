@@ -26,6 +26,9 @@ public final class Constants {
     public static final String COVID_TEST_RESULT_REVIEW_WORKFLOW = "covid_test_result_review_workflow";
     public static final String COVID_TEST_RESULT_SUBMISSION_WORKFLOW = "covid_test_result_submission_workflow";
 
+    public static final String S3_DOCUMENT_PROVIDER_TYPE="s3";
+    public static final String LOCAL_DOCUMENT_PROVIDER_TYPE="local";
+
     private Constants() {
     }
 

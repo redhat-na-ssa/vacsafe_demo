@@ -14,7 +14,118 @@
 
 == Local Containerized environment
 
+This project includes a _docker-compose_ config file that allows for deployment of the application as containers in your local environment.
+
+. Start application pod with all linux containers:
++
+-----
+$ docker-compose -f etc/docker-compose.yaml up -d
+-----
++
+NOTE:  If underlying linux container system in use in your local environment is podman, then follow this link:https://fedoramagazine.org/use-docker-compose-with-podman-to-orchestrate-containers-on-fedora/[set-up guide].
+
+. Log into _master_ realm of RH-SSO
+
+.. Disable SSL requirement for master realm:
++
+-----
+$ podman exec -it etc_psql_sso_1 psql sso -c "update REALM set ssl_required='NONE' where id = 'master'"
+-----
+
+.. Log into _master_ realm of RH-SSO at http://localhost:4080 using credentials of:  master / master
+
+. Log into _vacsafeRealm_ at http://localhost:4080/auth/admin/vacsafeRealm/console using credentials of:  ssoRealmAdmin / pam
+
+. Stop application pod with all linux containers:
++
+-----
+$ docker-compose -f etc/docker-compose.yaml down
+-----
+
+
 == Test
+
+. Set the following environment variables with values similar to the following:
++
+-----
+rhsso_hostname=localhost:4080
+kieserver_hostname=localhost:9080
+retrieve_token_url="http://$rhsso_hostname/auth/realms/vacsafeRealm/protocol/openid-connect/token"
+kjar_name=vacsafe-kjar
+-----
+
+. Retrieve an OAuth2 token using the `kie-server` SSO client of `vacsafeRealm`:
++
+-----
+TKN=$(curl -X POST "$retrieve_token_url" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "username=pamAdmin" \
+            -d "password=pam" \
+            -d "grant_type=password" \
+            -d "client_id=kie-server" \
+            | sed 's/.*access_token":"//g' | sed 's/".*//g')
+
+echo $TKN
+
+eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJOd010SUpfRnFuY3BMODJSQWRJMkMxSklLcXJWUzlBRWVNSHM0RktRZi1BIn0.eyJleHAiOjE2MTA3NjEzMzUsImlhdCI6MTYxMDc2MTAzNSwianRpIjoiOGM1YzJlZTAtMmZmZi00MGFhLTg0MGYtZWE2N2MxYWViNWZjIiwiaXNzIjoiaHR0cHM6Ly9rZXljbG9hay1yaC1zc28uYXBwcy5yaHRuY2twbWcucmhzbGVkb2NwLmNvbS9hdXRoL3JlYWxtcy9raWVSZWFsbSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiIzMmE4NjczNi04MThiLTRiM2MtODQyZi0zY2U4OGU3MjJkZGMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJraWUtc2VydmVyIiwic2Vzc2lvbl9zdGF0ZSI6Ijk0M2Y3NzRhLTgyOTItNDg1Mi04MmZkLWY2ZGNiMGU0NzQ0YiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cHM6Ly9yaHBhbS1raWVzZXJ2ZXItcmhwYW0tZGV2LW9uY29yZS5hcHBzLnJodG5ja3BtZy5yaHNsZWRvY3AuY29tOjQ0MyIsImh0dHBzOi8vcmhwYW0ta2llc2VydmVyLXJocGFtLWRldi1vbmNvcmUuYXBwcy5yaHRuY2twbWcucmhzbGVkb2NwLmNvbSJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsia2llbWdtdCIsImFkbWluIiwicmVzdC1hbGwiLCJBZG1pbmlzdHJhdG9ycyIsImtpZS1zZXJ2ZXIiLCJ1c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJwYW1hZG1pbiIsImVtYWlsIjoicGFtYWRtaW5Ab3BlbnNoaWZ0Lm9wZW50bGMuY29tIn0.bmHT1R25G13c4CdYK2am-5-a-Y1QwRequsXg2C55fj7kdfBr8yJ7_qRrGQxQ4spy28f3O0vdtMc10O3h3HFTPZoCaGVqfciE4axcZI2zZLdVmc6qlmfLIj-hjZMqoOB-tAYyHcFoUN9mtQmJWhCaFO0JysCUpQHeOjssSizjjRHLW5Dsg5JHqZxR4iBuG-KBlfK-cI0ryeNQV5ljdP6nNn7UrEbhHP_rFyZlmHXgOAraL6MC75Rnra0nwIvg4Wu30WXppxT7HUlQj1lFBaZQUzmFXXJBXHBq_5ofNHgervMFtmyzlG_3r892e4JS1qZ7o4fDaXyMvD1RTa6WwKpC8g
+-----
+
+. By setting _fullScopeAllowed=true_ in SSO client, all roles assocated with an authenticated user will be included in the access token.
++
+These roles can be visualized as follows:
++
+-----
+$ jq -R 'split(".") | .[1] | @base64d | fromjson' <<< $TKN | jq .realm_access.roles
+
+[
+  "interviewer",
+  "kie-server",
+  "user"
+]
+-----
+
+. Using the OAuth2 token, invoke the kie-server to determine its current status:
++
+-----
+$ curl -v \
+    -H "Authorization: Bearer $TKN" \
+    -X GET \
+    -H 'Accept:application/json' \
+    $kieserver_hostname/rest/server
+-----
+
+. Health Check Report
++
+-----
+$ curl -H "Authorization: Bearer $TKN" -H 'Accept:application/json' $kieserver_hostname/rest/server/healthcheck?report=true
+-----
+
+. View swagger
++
+-----
+$ curl -v -H "Authorization: Bearer $TKN" $kieserver_hostname/rest/swagger.json | jq .
+-----
+
+. View Swagger UI
++
+Point your browser to the output of the following:
++
+-----
+$ echo -en "\n$kieserver_hostname/rest/api-docs?url=http://$kieserver_hostname/rest/swagger.json\n"
+-----
+
+. List KIE Containers
++
+-----
+$ curl -H "Authorization: Bearer $TKN" -X GET $kieserver_hostname/rest/server/containers
+-----
+
+. List process definitions in JSON representation:
++
+-----
+$ curl -H "Authorization: Bearer $TKN" -X GET -H 'Accept:application/json' $kieserver_hostname/rest/server/containers/$kjar_name/processes/
+-----
+
 
 . Test
 +
@@ -25,6 +136,16 @@ $ mvn clean test \
 -----
 
 == Development
+
+. Build and start vacsafe app :
++
+-----
+$ mvn clean package -DskipTests && \
+         java \
+           -Dorg.kie.server.repo=../etc/vacsafe-service/runtime_configs \
+           -jar target/vacsafe-service-0.0.1.jar                                 &> /tmp/vacsafe-service.log & 
+-----
+
 
 == Reference
 

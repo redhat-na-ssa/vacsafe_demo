@@ -2,6 +2,8 @@ package com.redhat.service;
 
 import javax.persistence.EntityManagerFactory;
 
+import com.redhat.service.document.S3Service;
+
 import org.drools.persistence.jpa.marshaller.JPAPlaceholderResolverStrategy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;

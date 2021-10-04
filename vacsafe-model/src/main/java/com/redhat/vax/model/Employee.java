@@ -2,6 +2,7 @@ package com.redhat.vax.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,11 @@ public class Employee implements Serializable {
 
     static final long serialVersionUID = 1L;
 
+    // Fields retrieved from LDAP
     @Id
     private String id;
+
+    // private String username;
 
     @Column(name = "first_name")
     private String firstName;
@@ -40,13 +44,10 @@ public class Employee implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "date_of_birth")
-    private LocalDate dateOfBirth;
+    // @Column(name = "middle_name")
+    // private String middleName;
 
     private String email;
-
-    @Column(name = "alternate_email")
-    private String alternateEmail;
 
     @Column(name = "agency_code")
     private String agencyCode;
@@ -64,6 +65,27 @@ public class Employee implements Serializable {
 
     @Column(name = "is_hr")
     private boolean isHR;
+
+    // @Column(name = "full_time_part_time")
+    // private String fullTimePartTime; // contract, employee
+
+    // @Column(name = "user_type")
+    // private String userType; // state, local etc.
+
+    // private String ncid;
+
+    // Fields added in the UI (not in LDAP)
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
+    @Column(name = "alternate_email")
+    private String alternateEmail;
+
+    // // Fields computed/updated based on latest LDAP sync
+    // private EmployeeStatus status;
+
+    // @Column(name = "last_updated_time")
+    // private LocalDateTime lastUpdatedTime;
 
     public int getAge() {
         if (dateOfBirth != null) {
@@ -107,6 +129,50 @@ public class Employee implements Serializable {
         return errors;
     }
 
+    /**
+     * @return EmployeeLog from this instance
+     */
+    public EmployeeLog asEmployeeLog() {
+        EmployeeLog tmp = new EmployeeLog();
+        tmp.setAgencyCode(getAgencyCode());
+        tmp.setAgencyName(getAgencyName());
+        tmp.setDivisionCode(getDivisionCode());
+        tmp.setDivisionName(getDivisionName());
+        tmp.setEmail(getEmail());
+        tmp.setFirstName(getFirstName());
+        // tmp.setFullTimePartTime(getFullTimePartTime());
+        tmp.setHR(isHR());
+        tmp.setLastName(getLastName());
+        // tmp.setMiddleName(getMiddleName());
+        // tmp.setNcid(getNcid());
+        tmp.setSupervisor(getSupervisor());
+        // tmp.setUsername(getUsername());
+        // tmp.setUserType(getUserType());
+        tmp.setWorkforceId(getWorkforceId());
+        return tmp;
+    }
+
+    public void overwriteLdapFields(Employee e) {
+        this.setAgencyCode(e.getAgencyCode());
+        this.setAgencyName(e.getAgencyName());
+        this.setDivisionCode(e.getDivisionCode());
+        this.setDivisionName(e.getDivisionName());
+        this.setEmail(e.getEmail());
+        this.setFirstName(e.getFirstName());
+        // this.setFullTimePartTime(e.getFullTimePartTime());
+        this.setHR(e.isHR());
+        this.setLastName(e.getLastName());
+        // this.setMiddleName(e.getMiddleName());
+        // this.setNcid(e.getNcid());
+        this.setSupervisor(e.getSupervisor());
+        // this.setUsername(e.getUsername());
+        // this.setUserType(e.getUserType());
+    }
+
+    public String getWorkforceId() {
+        return id;
+    }
+
     public String getId() {
         return id;
     }
@@ -114,6 +180,14 @@ public class Employee implements Serializable {
     public void setId(String id) {
         this.id = id;
     }
+
+    // public String getUsername() {
+    //     return username;
+    // }
+
+    // public void setUsername(String username) {
+    //     this.username = username;
+    // }
 
     public String getFirstName() {
         return firstName;
@@ -202,6 +276,54 @@ public class Employee implements Serializable {
     public void setHR(boolean isHR) {
         this.isHR = isHR;
     }
+
+    // public String getMiddleName() {
+    //     return middleName;
+    // }
+
+    // public void setMiddleName(String middleName) {
+    //     this.middleName = middleName;
+    // }
+
+    // public String getFullTimePartTime() {
+    //     return fullTimePartTime;
+    // }
+
+    // public void setFullTimePartTime(String fullTimePartTime) {
+    //     this.fullTimePartTime = fullTimePartTime;
+    // }
+
+    // public String getUserType() {
+    //     return userType;
+    // }
+
+    // public void setUserType(String userType) {
+    //     this.userType = userType;
+    // }
+
+    // public String getNcid() {
+    //     return ncid;
+    // }
+
+    // public void setNcid(String ncid) {
+    //     this.ncid = ncid;
+    // }
+
+    // public EmployeeStatus getStatus() {
+    //     return status;
+    // }
+
+    // public void setStatus(EmployeeStatus status) {
+    //     this.status = status;
+    // }
+
+    // public LocalDateTime getLastUpdatedTime() {
+    //     return lastUpdatedTime;
+    // }
+
+    // public void setLastUpdatedTime(LocalDateTime lastUpdatedTime) {
+    //     this.lastUpdatedTime = lastUpdatedTime;
+    // }
 
     @Override
     public int hashCode() {

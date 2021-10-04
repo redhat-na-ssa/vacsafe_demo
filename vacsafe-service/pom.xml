@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.redhat</groupId>
+  <groupId>com.redhat.vacsafe</groupId>
   <artifactId>vacsafe-service</artifactId>
   <version>0.0.1</version>
   <packaging>jar</packaging>
@@ -10,7 +10,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.3.4.RELEASE</version>
+    <version>2.2.2.RELEASE</version>
   </parent>
 
   <properties>
@@ -20,11 +20,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <narayana.version>5.9.0.Final</narayana.version>
-    <!-- <fabric8.version>3.5.40</fabric8.version> -->
-    <!-- There is an issue with favric 3.5.40 see: https://issues.redhat.com/browse/JBPM-9045 -->
-    <fabric8.version>4.4.0</fabric8.version>
     <aws.java.sdk.version>2.17.19</aws.java.sdk.version>
-    <version.org.keycloak>15.0.2</version.org.keycloak>
+    <cxf.version>3.2.14</cxf.version>
+    <version.org.keycloak>9.0.15.redhat-00002</version.org.keycloak>
+    <vacsafe.kjar.version>0.0.1</vacsafe.kjar.version>
   </properties>
 
 
@@ -50,31 +49,70 @@
 
   <dependencies>
 
+    <!-- SSO -->
+    <dependency>
+      <groupId>org.keycloak</groupId>
+      <artifactId>keycloak-spring-boot-starter</artifactId>
+    </dependency>
+
+
+    <!-- Mail -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>com.redhat</groupId>
-      <artifactId>vacsafe-model</artifactId>
-      <version>0.0.1</version>
-    </dependency>
-
+    <!-- S3 -->
     <dependency>
       <groupId>software.amazon.awssdk</groupId>
       <artifactId>s3</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.keycloak</groupId>
-      <artifactId>keycloak-spring-boot-starter</artifactId>
+      <groupId>com.redhat.vacsafe</groupId>
+      <artifactId>vacsafe-model</artifactId>
+      <version>0.0.1</version>
     </dependency>
+
 
     <dependency>
       <groupId>org.kie</groupId>
-      <artifactId>kie-server-spring-boot-starter</artifactId>
+      <artifactId>kie-server-spring-boot-starter-jbpm</artifactId>
       <version>${version.org.kie}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>jbpm-spring-boot-data-sources</artifactId>
+      <version>${version.org.kie}</version>
+    </dependency>
+
+    <!-- database persistence -->
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+    </dependency>
+
+    <!-- swagger -->
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-jaxrs</artifactId>
+        <version>1.5.15</version>
+        <exclusions>
+            <exclusion>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>swagger-ui</artifactId>
+      <version>3.51.2</version>
     </dependency>
 
     <dependency>
@@ -90,242 +128,47 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+
+      <!-- Purpose of this plugin is to make KJars available in maven repo of linux container.
+           In particular, it'll copy these KJars to target/repository during maven build.
+           Afterwards, when creating linux container, these KJars are added to /m2/repository
+           At runtime, KJars are made available via:  JAVA_OPTS_APPEND='kie.maven.settings.custom=/m2/settings.xml'
+      -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+               <groupId>com.redhat.vacsafe</groupId>
+               <artifactId>vacsafe-kjar</artifactId>
+               <version>${vacsafe.kjar.version}</version>
+              <type>jar</type>
+              <outputDirectory>${project.build.directory}/repository/com/redhat/vacsafe/vacsafe-kjar/${vacsafe.kjar.version}</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+               <groupId>com.redhat.vacsafe</groupId>
+               <artifactId>vacsafe-kjar</artifactId>
+               <version>${vacsafe.kjar.version}</version>
+              <type>pom</type>
+              <outputDirectory>${project.build.directory}/repository/com/redhat/vacsafe/vacsafe-kjar/${vacsafe.kjar.version}</outputDirectory>
+            </artifactItem>
+          </artifactItems>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>devtest</id>
-      <properties>
-        <build.profile.id>devtest</build.profile.id>
-        <profileActive>devtest</profileActive>
-      </properties>
-    </profile>
-    <profile>
-      <id>dev</id>
-      <properties>
-        <build.profile.id>dev</build.profile.id>
-        <profileActive>dev</profileActive>
-      </properties>
-    </profile>
-    <profile>
-      <id>test</id>
-      <properties>
-        <build.profile.id>test</build.profile.id>
-        <profileActive>test</profileActive>
-      </properties>
-    </profile>
-    <profile>
-      <id>prod</id>
-      <properties>
-        <build.profile.id>prod</build.profile.id>
-        <profileActive>prod</profileActive>
-      </properties>
-    </profile>
-    <profile>
-      <id>h2</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>mysql</id>
-      <activation>
-        <property>
-          <name>mysql</name>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>mysql</groupId>
-          <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>postgres</id>
-      <activation>
-        <property>
-          <name>postgres</name>
-        </property>
-      </activation>
-      <dependencies>
-        <dependency>
-          <groupId>org.postgresql</groupId>
-          <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>com.h2database</groupId>
-          <artifactId>h2</artifactId>
-          <scope>test</scope>
-        </dependency>
-      </dependencies>
-    </profile>
-
-    <profile>
-      <id>docker</id>
-      <activation>
-        <property>
-          <name>docker</name>
-        </property>
-      </activation>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-maven-plugin</artifactId>
-            <version>${fabric8.version}</version>
-            <configuration>
-              <verbose>false</verbose>
-              <images>
-                <image>
-                  <name>apps/${project.artifactId}:${project.version}</name>
-                  <build>
-                    <from>fabric8/java-jboss-openjdk8-jdk</from>
-                    <assembly>
-                      <targetDir>/</targetDir>
-                      <inline>
-                        <files>
-                          <file>
-                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-                            <outputDirectory>deployments</outputDirectory>
-                            <destName>${project.build.finalName}.${project.packaging}</destName>
-                          </file>
-                          <file>
-                            <source>${project.artifactId}.xml</source>
-                            <outputDirectory>deployments</outputDirectory>
-                            <destName>${project.artifactId}.xml</destName>
-                          </file>
-                        </files>
-                        <fileSet>
-                          <directory>src/main/docker</directory>
-                          <outputDirectory>opt/jboss/.m2</outputDirectory>
-                          <includes>
-                            <include>settings.xml</include>
-                          </includes>
-                        </fileSet>
-                        <fileSet>
-                          <directory>../nc-vax-kjar/target/local-repository/maven</directory>
-                          <outputDirectory>opt/jboss/.m2/repository</outputDirectory>
-                        </fileSet>
-                      </inline>
-                      <user>jboss:jboss:jboss</user>
-                    </assembly>
-                  </build>
-                </image>
-              </images>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>install</phase>
-                <goals>
-                  <goal>resource</goal>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>openshift</id>
-      <activation>
-        <property>
-          <name>openshift</name>
-        </property>
-      </activation>
-
-      <properties>
-        <fabric8.mode>openshift</fabric8.mode>
-        <fabric8.build.strategy>docker</fabric8.build.strategy>
-      </properties>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>fabric8-maven-plugin</artifactId>
-            <version>${fabric8.version}</version>
-            <configuration>
-              <verbose>false</verbose>
-              <images>
-                <image>
-                  <name>apps/${project.artifactId}:${project.version}</name>
-                  <build>
-                    <from>fabric8/java-jboss-openjdk8-jdk</from>
-                    <assembly>
-                      <targetDir>/</targetDir>
-                      <inline>
-                        <files>
-                          <file>
-                            <source>${project.build.directory}/${project.build.finalName}.${project.packaging}</source>
-                            <outputDirectory>deployments</outputDirectory>
-                            <destName>${project.build.finalName}.${project.packaging}</destName>
-                          </file>
-                          <file>
-                            <source>${project.artifactId}.xml</source>
-                            <outputDirectory>deployments</outputDirectory>
-                            <destName>${project.artifactId}.xml</destName>
-                          </file>
-                        </files>
-                        <fileSet>
-                          <directory>src/main/docker</directory>
-                          <outputDirectory>opt/jboss/.m2</outputDirectory>
-                          <includes>
-                            <include>settings.xml</include>
-                          </includes>
-                        </fileSet>
-                        <fileSet>
-                          <directory>../nc-vax-kjar/target/local-repository/maven</directory>
-                          <outputDirectory>opt/jboss/.m2/repository</outputDirectory>
-                        </fileSet>
-                      </inline>
-                      <user>jboss:jboss:jboss</user>
-                    </assembly>
-                    <env>
-                      <M2_HOME>/opt/jboss/.m2</M2_HOME>
-                      <JAVA_OPTIONS>-Dkie.maven.settings.custom=/opt/jboss/.m2/settings.xml -Dorg.kie.persistence.postgresql.useBytea=true</JAVA_OPTIONS>
-                    </env>
-                    <runCmds>
-                      <run>chgrp -Rf root /opt/jboss &amp;&amp; chmod -Rf g+w /opt/jboss</run>
-                      <run>chgrp -Rf root /deployments &amp;&amp; chmod -Rf g+w /deployments</run>
-                    </runCmds>
-                    <ports>
-                      <port>8090</port>
-                    </ports>
-                  </build>
-                </image>
-              </images>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>install</phase>
-                <goals>
-                  <goal>resource</goal>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
   <repositories>
     <repository>

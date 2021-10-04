@@ -1,6 +1,8 @@
 package com.redhat.service;
 
 import org.jbpm.services.api.ProcessService;
+import org.keycloak.representations.AccessToken;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.redhat.service.document.DocumentService;
 import com.redhat.vax.model.Attachment;
 import com.redhat.vax.model.CovidTestResultDocument;
 import com.redhat.vax.model.Document;
@@ -44,7 +48,7 @@ public class AttestationController {
     private ProcessService processService;
 
     @Autowired
-    private S3Service s3Service;
+    private DocumentService documentService;
 
     @Autowired
     CustomQueryService customQueryService;
@@ -68,13 +72,9 @@ public class AttestationController {
             @RequestPart(name = ATTACHMENT_FIELD_NAME) MultipartFile file
         ) {
 
-        // String user = authUtil.getUser(authentication);
-        // log.debug(">>> User: {} | Employee: {}", user, employeeIn);
-        // if (!user.equals(employeeIn.getId())) {
-        //     return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
-        // }
-
         try {
+
+            validate(authentication, employeeIn, document);
 
             prepareDocumentAndPersistToS3(document, employeeIn, file);
 
@@ -84,6 +84,8 @@ public class AttestationController {
             log.info("COVID test result submission workflow started. PID: {} \n{}", pid, document);
 
             return ResponseEntity.accepted().build();
+        } catch (AuthorizationException ae) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ae.getMessage());
         } catch (Exception e) {
             log.error("Error while processing COVID test result document\n\t{}\n\t{}", e, employeeIn, document);
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -104,7 +106,6 @@ public class AttestationController {
         // if (!user.equals(employeeIn.getId())) {
         //     return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
         // }
-
         try {
             prepareDocumentAndPersistToS3(document, employeeIn, file);
 
@@ -142,7 +143,7 @@ public class AttestationController {
         }
 
         String s3DocumentId = attachment.getS3UUID();
-        byte[] bytes = s3Service.get(s3DocumentId);
+        byte[] bytes = documentService.get(s3DocumentId);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(attachment.getContentType()))
@@ -169,7 +170,7 @@ public class AttestationController {
         // persist document in AWS S3
         if (s3PersistenceEnabled) {
             log.debug(">>> S3 bucket: {}", bucketName);
-            String s3uuid = s3Service.put(file.getBytes());
+            String s3uuid = documentService.put(file.getBytes());
             attachment.setS3UUID(s3uuid);
         } else {
             log.warn("AWS S3 is currently disabled. Set enable.s3.persistence=true to enable it.");
@@ -198,6 +199,32 @@ public class AttestationController {
         if (!validationErrors.isEmpty()) {
             String msg = validationErrors.stream().collect(Collectors.joining("\n", "Validation errors ...\n", ""));
             throw new IllegalArgumentException(msg);
+        }
+    }
+
+
+    /**
+     * Check if the employee first and last name match the one in sso token
+     * @param authentication
+     * @param employeeIn
+     */
+    private void validate(Authentication authentication, Employee employee, Document document) {
+        if (document.getSubmittedBy() == null || document.getSubmittedBy().trim().isEmpty()) {
+            AccessToken accessToken = authUtil.getAccessToken(authentication);
+            String firstName = accessToken.getGivenName();
+            String lastName  = accessToken.getFamilyName();
+            log.debug("accessToken.getGivenName()={}", firstName);
+            log.debug("accessToken.getFamilyName()={}", lastName);
+
+            if (firstName != null && !firstName.equals(employee.getFirstName())) {
+                throw new AuthorizationException("The employee first name in the payload '" + employee.getFirstName()
+                        + "' does not match the one retrieved from sso token '" + firstName + "'");
+            }
+
+            if (lastName != null && !lastName.equals(employee.getLastName())) {
+                throw new AuthorizationException("The employee last name in the payload '" + employee.getLastName()
+                        + "' does not match the one retrieved from sso token '" + lastName + "'");
+            }
         }
     }
 
