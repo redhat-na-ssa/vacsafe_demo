@@ -49,8 +49,9 @@ $ docker-compose -f etc/docker-compose.yaml down
 +
 -----
 rhsso_hostname=localhost:4080
+realm_id=vacsafeRealm
+retrieve_token_url="http://$rhsso_hostname/auth/realms/$realm_id/protocol/openid-connect/token"
 kieserver_hostname=localhost:9080
-retrieve_token_url="http://$rhsso_hostname/auth/realms/vacsafeRealm/protocol/openid-connect/token"
 kjar_name=vacsafe-kjar
 -----
 
@@ -83,6 +84,17 @@ $ jq -R 'split(".") | .[1] | @base64d | fromjson' <<< $TKN | jq .realm_access.ro
   "user"
 ]
 -----
+
+. Login directly to the custom SSO realm used in the demo.  Details as follows:
+
+.. *URL*
++
+-----
+$ echo -en "\n$rhsso_hostname/auth/admin/$realm_id/console\n"
+-----
+
+.. *userId* :  ssoRealmAdmin
+.. *password* : pam
 
 . Using the OAuth2 token, invoke the kie-server to determine its current status:
 +

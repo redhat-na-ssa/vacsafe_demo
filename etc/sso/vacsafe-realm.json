@@ -35,7 +35,7 @@
       {
          "username":"ssoRealmAdmin",
          "enabled":true,
-         "email":"ssoRealmAdmin@openshift.opentlc.com",
+         "email":"ssoRealmAdmin@redhat.com",
          "credentials":[
             {
                "type":"password",
@@ -72,7 +72,15 @@
       {
          "username":"pamAdmin",
          "enabled":true,
-         "email":"pamAdmin@openshift.opentlc.com",
+         "email":"pamAdmin@redhat.com",
+         "firstName" : "Pam",
+         "lastName" : "Admin",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "IT" ],
+            "division" : [ "div1" ],
+            "workforceid" : [ "workforce1" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -84,33 +92,8 @@
             "admin",
             "kie-server",
             "kiemgmt",
-            "rest-all"
-         ],
-         "clientRoles":{
-            "account":[
-               "view-profile",
-               "manage-account"
-            ]
-         },
-         "groups":[
-            "supplier",
-            "analyst",
-            "manager"
-         ]
-      },{
-         "username":"controlleruser",
-         "enabled":true,
-         "email":"controller@openshift.opentlc.com",
-         "credentials":[
-            {
-               "type":"password",
-               "value":"pam"
-            }
-         ],
-         "realmRoles":[
-            "kie-server",
             "rest-all",
-            "guest"
+            "AG-COVIDSafe-Approver"
          ],
          "clientRoles":{
             "account":[
@@ -122,81 +105,20 @@
             "supplier",
             "analyst",
             "manager"
-         ]
-      },
-      {
-         "username":"casemanager",
-         "enabled":true,
-         "email":"casemanager@openshift.opentlc.com",
-         "credentials":[
-            {
-               "type":"password",
-               "value":"pam"
-            }
-         ],
-         "realmRoles":[
-
-         ],
-         "clientRoles":{
-            "account":[
-               "view-profile",
-               "manage-account"
-            ]
-         },
-         "groups":[
-            "manager"
-         ]
-      },
-      {
-         "username":"casesupplier",
-         "enabled":true,
-         "email":"casesupplier@openshift.opentlc.com",
-         "credentials":[
-            {
-               "type":"password",
-               "value":"pam"
-            }
-         ],
-         "realmRoles":[
-
-         ],
-         "clientRoles":{
-            "account":[
-               "view-profile",
-               "manage-account"
-            ]
-         },
-         "groups":[
-            "supplier"
-         ]
-      },
-      {
-         "username":"caseuser",
-         "enabled":true,
-         "email":"caseuser@openshift.opentlc.com",
-         "credentials":[
-            {
-               "type":"password",
-               "value":"pam"
-            }
-         ],
-         "realmRoles":[
-            "user"
-         ],
-         "clientRoles":{
-            "account":[
-               "view-profile",
-               "manage-account"
-            ]
-         },
-         "groups":[
-
          ]
       },
       {
          "username":"Ava",
          "enabled":true,
-         "email":"ava@openshift.opentlc.com",
+         "email":"ava@redhat.com",
+         "firstName" : "Ava",
+         "lastName" : "Pena",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "IT" ],
+            "division" : [ "div2" ],
+            "workforceid" : [ "workforce2" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -206,7 +128,8 @@
          "realmRoles":[
             "applicant",
             "kie-server",
-            "user"
+            "user",
+            "AG-COVIDSafe-Approver"
          ],
          "clientRoles":{
             "account":[
@@ -220,7 +143,15 @@
       {
          "username":"Bill",
          "enabled":true,
-         "email":"bill@openshift.opentlc.com",
+         "email":"bill@redhat.com",
+         "firstName" : "Bill",
+         "lastName" : "Jenkins",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Dept of Transportation" ],
+            "division" : [ "div2" ],
+            "workforceid" : [ "workforce3" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -244,7 +175,15 @@
       {
          "username":"Tina",
          "enabled":true,
-         "email":"tina@openshift.opentlc.com",
+         "email":"tina@redhat.com",
+         "firstName" : "Tina",
+         "lastName" : "Miranda",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Dept of Public Health" ],
+            "division" : [ "div2" ],
+            "workforceid" : [ "workforce4" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -268,7 +207,15 @@
       {
          "username":"Tom",
          "enabled":true,
-         "email":"tom@openshift.opentlc.com",
+         "email":"tom@redhat.com",
+         "firstName" : "Tom",
+         "lastName" : "Bentley",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Finance" ],
+            "division" : [ "div3" ],
+            "workforceid" : [ "workforce5" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -292,7 +239,15 @@
       {
          "username":"Eve",
          "enabled":true,
-         "email":"eve@openshift.opentlc.com",
+         "email":"eve@redhat.com",
+         "firstName" : "Eve",
+         "lastName" : "Edwards",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "General Inspections" ],
+            "division" : [ "div3" ],
+            "workforceid" : [ "workforce6" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -316,7 +271,15 @@
       {
          "username":"Ann",
          "enabled":true,
-         "email":"ann@openshift.opentlc.com",
+         "email":"ann@redhat.com",
+         "firstName" : "Ann",
+         "lastName" : "Lucero",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Parks_and_Wildlife" ],
+            "division" : [ "div3" ],
+            "workforceid" : [ "workforce7" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -341,7 +304,15 @@
       {
          "username":"Bob",
          "enabled":true,
-         "email":"bob@openshift.opentlc.com",
+         "email":"bob@redhat.com",
+         "firstName" : "Bob",
+         "lastName" : "Reese",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Land Management" ],
+            "division" : [ "div3" ],
+            "workforceid" : [ "workforce8" ]
+         },
          "credentials":[
             {
                "type":"password",
@@ -361,31 +332,6 @@
             ]
          },
          "groups":[
-         ]
-      },
-      {
-         "username":"pamDeveloper",
-         "enabled":true,
-         "email":"pamDeveloper@openshift.opentlc.com",
-         "credentials":[
-            {
-               "type":"password",
-               "value":"pam"
-            }
-         ],
-         "realmRoles":[
-            "kie-server",
-            "rest-all",
-            "developer"
-         ],
-         "clientRoles":{
-            "account":[
-               "view-profile",
-               "manage-account"
-            ]
-         },
-         "groups":[
-
          ]
       }
    ],
@@ -904,7 +850,7 @@
          "secret":"**********",
          "redirectUris":[
             "http://localhost:9080/*",
-            "http://localhost:4200/*"
+            "http://localhost:9000/*"
          ],
          "webOrigins":[
             "+"
@@ -1007,6 +953,59 @@
                   "id.token.claim":"true",
                   "access.token.claim":"true"
                }
+            },
+            {
+                "name": "agency",
+                "protocol": "openid-connect",
+                "protocolMapper": "oidc-usermodel-attribute-mapper",
+                "consentRequired": false,
+                "config": {
+                    "userinfo.token.claim": "true",
+                    "user.attribute": "agency",
+                    "id.token.claim": "true",
+                    "access.token.claim": "true",
+                    "claim.name": "agency",
+                    "jsonType.label": "String"
+                }
+            },
+            {
+                "name": "workforceid",
+                "protocol": "openid-connect",
+                "protocolMapper": "oidc-usermodel-attribute-mapper",
+                "consentRequired": false,
+                "config": {
+                    "user.attribute": "workforceid",
+                    "id.token.claim": "true",
+                    "access.token.claim": "true",
+                    "claim.name": "workforceid",
+                    "userinfo.token.claim": "true"
+                }
+            },
+            {
+                "name": "birthdate",
+                "protocol": "openid-connect",
+                "protocolMapper": "oidc-usermodel-attribute-mapper",
+                "consentRequired": false,
+                "config": {
+                    "user.attribute": "birthdate",
+                    "id.token.claim": "true",
+                    "access.token.claim": "true",
+                    "claim.name": "birthdate",
+                    "userinfo.token.claim": "true"
+                }
+            },
+            {
+                "name": "division",
+                "protocol": "openid-connect",
+                "protocolMapper": "oidc-usermodel-attribute-mapper",
+                "consentRequired": false,
+                "config": {
+                    "user.attribute": "division",
+                    "id.token.claim": "true",
+                    "access.token.claim": "true",
+                    "claim.name": "division",
+                    "userinfo.token.claim": "true"
+                }
             }
          ],
          "useTemplateConfig":false,
@@ -1503,7 +1502,7 @@
     "host": "{{ smtp_host }}",
     "replyTo": "rhtgpte_donotreply@redhat.com",
     "from": "rhtgpte-admins@redhat.com",
-    "fromDisplayName": "kieRealm Admin",
+    "fromDisplayName": "VacSafe Realm Admin",
     "ssl": "",
     "user": "{{ smtp_userid }}"
   },
