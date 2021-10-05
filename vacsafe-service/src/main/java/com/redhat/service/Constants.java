@@ -29,6 +29,9 @@ public final class Constants {
     public static final String S3_DOCUMENT_PROVIDER_TYPE="s3";
     public static final String LOCAL_DOCUMENT_PROVIDER_TYPE="local";
 
+    public static final String AWS_ACCESS_KEY_ID="AWS_ACCESS_KEY_ID";
+    public static final String AWS_SECRET_ACCESS_KEY="AWS_SECRET_ACCESS_KEY";
+
     private Constants() {
     }
 

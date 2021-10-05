@@ -90,21 +90,17 @@ items:
                 cpu: "500m"
             env:
               - name: KIE_SERVER_URL
-                value: 'http:\/\/{{ vacsafe_rhpam_app_name }}:8080'
+                value: 'http:\/\/{{ vacsafe_service }}:8080'
               - name: KIE_SERVER_USERID
                 value: "kieserver"
               - name: KIE_SERVER_PASSWORD
-                value: "{{ vacsafe_rhpam_api_passwd }}"
+                value: "{{ vacsafe_service_api_passwd }}"
               - name: DM_CONTAINER_ALIAS
                 value: ""
               - name: PAM_CONTAINER_ALIAS
-                value: "{{ vacsafe_rhpam_deployment_name }}"
+                value: "{{ vacsafe_service_deployment_name }}"
               - name: PROCESS_ID
-                value: "{{ vacsafe_rhpam_process_id }}"
-              - name: FHIR_SERVER_URL
-                value: 'http:\/\/{{ fhir_server_application_name }}:8080'
-              - name: PATIENT_VIEWER_URL
-                value: "{{ patient_viewer_url }}"
+                value: "{{ vacsafe_test_result_submittion_process_id }}"
               - name: IS_OPENSHIFT
                 value: "true"
             volumeMounts:

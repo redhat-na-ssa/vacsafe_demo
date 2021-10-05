@@ -52,16 +52,16 @@ items:
         containers:
           - env:
             - name: JAVA_MAX_MEM_RATIO
-              value: "{{ vacsafe_rhpam_java_max_mem_ratio }}"
+              value: "{{ vacsafe_service_java_max_mem_ratio }}"
             - name: JAVA_INITIAL_MEM_RATIO
-              value: "{{ vacsafe_rhpam_java_initial_mem_ratio }}"
+              value: "{{ vacsafe_service_java_initial_mem_ratio }}"
             - name: GC_MAX_METASPACE_SIZE
-              value: "{{ vacsafe_rhpam_gc_max_metaspace_size }}"
+              value: "{{ vacsafe_service_gc_max_metaspace_size }}"
             - name: KUBERNETES_NAMESPACE
               valueFrom:
-                secretKeyRef:
-                  name: v1
-                  key: changeme
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
             - name: SPRING_CONFIG_LOCATION
               value: file:///deployments/config/{{ application_configmap_key }}
 
@@ -72,16 +72,19 @@ items:
 
             - name: MAVEN_MIRROR_URL
               value: "{{ nexus_mirror }}"
+
+            # https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.html
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
-                  name: mysecret
-                  key: password
+                  name: {{ aws_creds_secret_name }}
+                  key: aws_access_key_id
             - name: AWS_SECRET_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
-                  name: mysecret
-                  key: password
+                  name: {{ aws_creds_secret_name }}
+                  key: aws_secret_access_key
+
             imagePullPolicy: IfNotPresent
             name: {{ application_name }}
             livenessProbe:

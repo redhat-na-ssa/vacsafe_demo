@@ -8,7 +8,7 @@
   vars_files:
     - group_vars/all.yml
     - group_vars/tools.yml
-    - group_vars/vacsafe_rhpam.yml
+    - group_vars/vacsafe_service.yml
 
   tasks:
     - include: tasks/dashbuilder.yml

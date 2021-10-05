@@ -37,8 +37,7 @@
 
 - name: set env var facts
   set_fact:
-    vacsafe_rhpam_hostname: "{{ vacsafe_rhpam_app_name }}-{{ project_name }}.{{ ocp_domain }}"
-    fhir_server_application_hostname: "{{ fhir_server_application_name }}-{{ project_name }}.{{ ocp_domain }}"
+    vacsafe_service_hostname: "{{ vacsafe_service }}-{{ project_name }}.{{ ocp_domain }}"
     sso_url: "https://{{ sso_route_cmd.stdout }}"
 
 - name: copy env.js file to work directory

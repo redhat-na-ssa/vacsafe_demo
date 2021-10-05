@@ -1,5 +1,5 @@
 psql_app_name: "{{ rhpam_psql_app_name }}"
-application_name: "{{ vacsafe_rhpam_app_name }}"
+application_name: "{{ vacsafe_service }}"
 
 postgresql_pv_capacity: 5Gi 
 postgresql_version: 12-el8
@@ -20,25 +20,26 @@ undeploy_psql_bpm: "false"
 
 quartz_clustered: false
 
+aws_creds_secret_name: aws-creds
+
 service_account: "{{ application_name }}"
 application_properties: application.properties
 application_configmap: "{{ application_name }}"
 application_configmap_key: "{{ application_properties }}"
 binary_imagestream_template: binary-imagestream.yml 
-service_image: quay.io/redhat_naps_da/vacsafe-rhpam
-service_image_tag: 0.0.12
-application_template: vacsafe-rhpam.yml
-vacsafe_rhpam_java_max_mem_ratio: 60
-vacsafe_rhpam_java_initial_mem_ratio: 0
-vacsafe_rhpam_gc_max_metaspace_size: 500
+service_image: quay.io/redhat_naps_da/vacsafe-service
+service_image_tag: 0.0.1
+application_template: vacsafe-service.yml
+vacsafe_service_java_max_mem_ratio: 60
+vacsafe_service_java_initial_mem_ratio: 0
+vacsafe_service_gc_max_metaspace_size: 500
 
-# Location on image file system where vacsafe-rhpam.xml  (which defines deployed KIE containers) will reside
+# Location on image file system where vacsafe-service.xml  (which defines deployed KIE containers) will reside
 kie_server_repo_path: /deployments/config
 kie_admin_user: admin
 kie_admin_password: user
-kieserver_user_password: "{{ vacsafe_rhpam_api_passwd }}"
+kieserver_user_password: "{{ vacsafe_service_api_passwd }}"
 
-kie_deployment_name: "{{ vacsafe_rhpam_deployment_name }}"
-kie_deployment_version: "{{ vacsafe_rhpam_deployment_version }}"
-kie_process_id: "{{ vacsafe_rhpam_process_id }}"
-fhir_server_url: "http://{{ fhir_server_application_name }}:8080"
+kie_deployment_name: "{{ vacsafe_service_deployment_name }}"
+kie_deployment_version: "{{ vacsafe_service_deployment_version }}"
+kie_process_id: "{{ vacsafe_test_result_submittion_process_id }}"

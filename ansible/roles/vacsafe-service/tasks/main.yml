@@ -1,6 +1,6 @@
 ---
 
-#######    Fhir Server Database    ##################
+#######    RH-PAM Database    ##################
 
 - name: "create {{ postgresql_service_account }} service account in {{ namespace }}"
   oc_serviceaccount:
@@ -20,14 +20,7 @@
     dest: "{{ work_dir }}/{{ postgresql_init_configmap }}/"
   with_fileglob:
     - "{{ resources_dir }}/sql/*.sh"
-
-# Commented out because FHIR server auto-generates the database schema (if it doesn't already exist)
-#- name: download sql scripts from remote repository
-#  get_url:
-#    url: "{{ item }}"
-#    dest: "{{ work_dir }}/{{ postgresql_init_configmap }}/"
-#  with_items:
-#     - "{{ psql_init_scripts }}"
+    - "{{ resources_dir }}/sql/*.sql"
 
 - name: create {{ postgresql_init_configmap }} configmap
   oc_configmap:
@@ -37,15 +30,6 @@
     namespace: "{{ namespace }}"
     from_file:
       dir: "{{ work_dir }}/{{ postgresql_init_configmap }}"
-
-- name: create {{ hapi_psql_debezium_conf_name }} configmap
-  oc_configmap:
-    oc_binary: "{{ openshift_cli }}"
-    state: present
-    name: "{{ hapi_psql_debezium_conf_name }}"
-    namespace: "{{ namespace }}"
-    from_file:
-      dir: "{{ resources_dir }}/sql/{{ hapi_psql_debezium_conf_file }}"
 
 - name: copy postgresql template
   template:
@@ -94,7 +78,26 @@
 ###########################################################
 
 
-########    FHIR Server    #############
+########    S3 Secret   #########
+
+- name: check if {{ aws_creds_secret_name }} secret is deployed
+  oc_obj:
+    oc_binary: "{{ openshift_cli }}"
+    state: list
+    namespace: "{{ namespace }}"
+    name: "{{ aws_creds_secret_name }}"
+    kind: secret
+  register: s3_secret_result
+
+- name: "copy RHPDS S3 secret to this namespace"
+  shell: "{{ openshift_cli }} get secret {{ aws_creds_secret_name }} --namespace=kube-system -o yaml | sed '/namespace: .*/d' | {{ openshift_cli }} apply -n {{ namespace }} -f -"
+  when: s3_secret_result.ansible_module_results.stderr is defined and s3_secret_result.ansible_module_results.stderr != ""
+
+
+#################################
+
+
+########    vacsafe-service    #############
 - name: create {{ service_account }} service account for {{ application_name }} application
   oc_serviceaccount:
     oc_binary: "{{ openshift_cli }}"
@@ -112,10 +115,27 @@
     namespace: "{{ namespace }}"
     rolebinding_name: "{{ service_account }}-admin"
 
-- name: copy {{ application_properties }} template
+- name: create work directory
+  file:
+    path: "{{ work_dir }}/{{ application_name }}"
+    state: directory
+
+- name: retrieve sso route
+  shell: "{{ openshift_cli }} get route sso -o jsonpath='{.spec.host}' -n {{ namespace_sso }}"
+  register: sso_route_cmd
+
+- set_fact:
+    sso_url: "https://{{ sso_route_cmd.stdout }}"
+
+- name: copy config files to work directory
   template:
-    src: "{{ resources_dir }}/{{ application_properties }}"
-    dest: "{{ work_dir }}/{{ application_properties }}"
+    src: "{{ item }}"
+    dest: "{{ work_dir }}/{{ application_name }}/"
+  with_fileglob:
+    - "{{ resources_dir }}/application.properties"
+    - "{{ resources_dir }}/jbpm-quartz.properties"
+    - "{{ resources_dir }}/logback-spring.xml"
+    - "{{ resources_dir }}/{{ application_name }}.xml"
 
 - name: create {{ application_configmap }} application configmap
   oc_configmap:
@@ -124,7 +144,7 @@
     name: "{{ application_configmap }}"
     namespace: "{{ namespace }}"
     from_file:
-      dir: "{{ work_dir }}/{{ application_properties }}"
+      dir: "{{ work_dir }}/{{ application_name }}"
 
 - import_tasks: deploy_from_source.yml
   when: deploy_from is defined and deploy_from == "source"
@@ -148,9 +168,4 @@
     files:
       - "{{ work_dir }}/route.yml"
 
-###########################################################
-
-
-########    HAPI FHIR Postgresql Debezium    #############
-- import_tasks: deploy_debezium_connector.yml
 ###########################################################

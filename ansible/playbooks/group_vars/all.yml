@@ -33,24 +33,13 @@ sso_clientId: "vacsafe"
 # The following two options are allowed:
 #   image  : Use if a container image of your application is already available from a public container image repo:  ie:  quay.io , registry.redhat.io or docker hub
 #   source : Use if this ansible includes tasks to deploy a Jenkins or Tekton BuildConfig that creates the application image from source code
-# deploy_from: image
-
-# kafka_debezium_db_server_name: fhir
-# kafka_debezium_table_whitelist: public.hfj_res_ver
-
-# Topic that Debezium will stream to and triggers BPM process
-# kafka_debezium_topic: "{{ kafka_debezium_db_server_name }}.{{ kafka_debezium_table_whitelist }}"
+deploy_from: image
 
 
-# fhir_server_application_name: fhir-server
-vacsafe_rhpam_app_name: vacsafe-rhpam
-vacsafe_rhpam_api_passwd: kieserver
-vacsafe_rhpam_deployment_name: vacsafe-kjar
-vacsafe_rhpam_deployment_version: 1.0.0
-vacsafe_rhpam_process_id: vacsafe
-
-# namespace_knativeserving: knative-serving
-# namespace_knativeeventing: knative-eventing
-
+vacsafe_service: vacsafe-service
+vacsafe_service_api_passwd: kieserver
+vacsafe_service_deployment_name: vacsafe-kjar
+vacsafe_service_deployment_version: 0.0.1
+vacsafe_test_result_submittion_process_id: covid_test_result_submission_workflow
 
 vacsafe_ui_app_name: vacsafe-ui

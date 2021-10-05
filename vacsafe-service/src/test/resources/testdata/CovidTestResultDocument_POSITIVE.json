@@ -1,0 +1,16 @@
+{
+  "document": {
+    "com.redhat.vax.model.CovidTestResultDocument": {
+      "employee": {
+        "com.redhat.vax.model.Employee": {
+          "id": "emp1234",
+          "email": "emp1234@redhat.com",
+          "first_name": "shadow",
+          "last_name": "man"
+        }
+      },
+      "covidTestDate": "2021-03-16T13:56:39.492",
+      "covidTestResult": "POSITIVE"
+    }
+  }
+}

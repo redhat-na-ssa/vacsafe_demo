@@ -126,6 +126,16 @@ $ curl -H "Authorization: Bearer $TKN" -X GET $kieserver_hostname/rest/server/co
 $ curl -H "Authorization: Bearer $TKN" -X GET -H 'Accept:application/json' $kieserver_hostname/rest/server/containers/$kjar_name/processes/
 -----
 
+. Start Test Result Submission Workflow
++
+-----
+$ curl -v -H "Authorization: Bearer $TKN" \
+       -X POST \
+       -H 'Content-Type:application/json' \
+       $kieserver_hostname/rest/server/containers/$kjar_name/processes/covid_test_result_submission_workflow/instances \
+       -d @vacsafe-service/src/test/resources/testdata/CovidTestResultDocument_POSITIVE.json
+-----
+
 
 . Test
 +

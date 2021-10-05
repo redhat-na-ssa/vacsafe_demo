@@ -2,17 +2,17 @@
 
 - set_fact:
     namespace: "{{ project_name }}"
-    resources_dir: "{{ resources_base_dir }}/rhpam-ui"
-    work_dir_name: rhpam-ui
+    resources_dir: "{{ resources_base_dir }}/vacsafe-ui"
+    work_dir_name: vacsafe-ui
 - include_role:
-    name: ../roles/rhpam-ui
+    name: ../roles/vacsafe-ui
   when: >
     ACTION is not defined or
     ACTION is none or
     ACTION|trim() == "" or
     ACTION|trim() == "install"
 - include_role:
-    name: ../roles/rhpam-ui
+    name: ../roles/vacsafe-ui
     tasks_from: uninstall
   when: >
     ACTION is defined and
