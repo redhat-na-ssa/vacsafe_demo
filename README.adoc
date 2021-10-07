@@ -2,15 +2,17 @@
 
 == Purpose
 
-=== Technical Discussion Vectors
+To provide a reproducible demo of a vaccination attestation application that uses Red Hat technologies.
 
-== Architecture
+=== Technical Discussion Vectors
 
 == Deploy to OpenShift
 
-== Demo Components
-
 == Demo Scenario
+
+== Architecture
+
+== Demo Components
 
 == Local Containerized environment
 
@@ -24,17 +26,6 @@ $ docker-compose -f etc/docker-compose.yaml up -d
 +
 NOTE:  If underlying linux container system in use in your local environment is podman, then follow this link:https://fedoramagazine.org/use-docker-compose-with-podman-to-orchestrate-containers-on-fedora/[set-up guide].
 
-. Log into _master_ realm of RH-SSO
-
-.. Disable SSL requirement for master realm:
-+
------
-$ podman exec -it etc_psql_sso_1 psql sso -c "update REALM set ssl_required='NONE' where id = 'master'"
------
-
-.. Log into _master_ realm of RH-SSO at http://localhost:4080 using credentials of:  master / master
-
-. Log into _vacsafeRealm_ at http://localhost:4080/auth/admin/vacsafeRealm/console using credentials of:  ssoRealmAdmin / pam
 
 . Stop application pod with all linux containers:
 +
@@ -45,15 +36,62 @@ $ docker-compose -f etc/docker-compose.yaml down
 
 == Test
 
-. Set the following environment variables with values similar to the following:
+=== Environment Variables
+
+Set the following environment variables with values similar to the following:
+
+. if testing locally deployed application (via docker-compose):
 +
 -----
-rhsso_hostname=localhost:4080
-realm_id=vacsafeRealm
-retrieve_token_url="http://$rhsso_hostname/auth/realms/$realm_id/protocol/openid-connect/token"
-kieserver_hostname=localhost:9080
+RHSSO_URL=http://localhost:4080
+REALM_ID=vacsafeRealm
+retrieve_token_url="http://$RHSSO_URL/auth/realms/$REALM_ID/protocol/openid-connect/token"
+VACSAFE_SERVICE_URL=http://localhost:9080
 kjar_name=vacsafe-kjar
 -----
+
+. If testing environment deployed to OpenShift:
++
+-----
+RHSSO_URL=https://$(oc get route sso -n vacsafe-sso --template='{{ .spec.host }}')
+REALM_ID=vacsafeRealm
+retrieve_token_url="$RHSSO_URL/auth/realms/$REALM_ID/protocol/openid-connect/token"
+VACSAFE_SERVICE_URL=https://$(oc get route vacsafe-service -n user1-vacsafe --template='{{ .spec.host }}')
+kjar_name=vacsafe-kjar
+-----
+
+=== RH-SSO
+
+. Log into _master_ realm of RH-SSO
+
+.. If deployed in a local container environment, disable SSL requirement for master realm:
++
+-----
+$ podman exec -it etc_psql_sso_1 psql sso -c "update REALM set ssl_required='NONE' where id = 'master'"
+-----
+
+.. Log into _master_ realm of RH-SSO using credentials of  _master / master_ at the following URL:
++
+-----
+$ echo -en "\n$RHSSO_URL/auth/admin/master/console\n"
+-----
+
+. Login directly to the custom SSO realm used in the demo.  Details as follows:
+
+.. *URL*
++
+-----
+$ echo -en "\n$RHSSO_URL/auth/admin/$REALM_ID/console\n"
+-----
+
+.. *userId* :  ssoRealmAdmin
+.. *password* : pam
+
+
+=== Vacsafe Service
+
+The _vacsafe_service_ is enabled with an embedded RH-PAM _kieserver_ as well as various endpoints for managing documents.
+
 
 . Retrieve an OAuth2 token using the `kie-server` SSO client of `vacsafeRealm`:
 +
@@ -85,17 +123,6 @@ $ jq -R 'split(".") | .[1] | @base64d | fromjson' <<< $TKN | jq .realm_access.ro
 ]
 -----
 
-. Login directly to the custom SSO realm used in the demo.  Details as follows:
-
-.. *URL*
-+
------
-$ echo -en "\n$rhsso_hostname/auth/admin/$realm_id/console\n"
------
-
-.. *userId* :  ssoRealmAdmin
-.. *password* : pam
-
 . Using the OAuth2 token, invoke the kie-server to determine its current status:
 +
 -----
@@ -103,19 +130,19 @@ $ curl -v \
     -H "Authorization: Bearer $TKN" \
     -X GET \
     -H 'Accept:application/json' \
-    $kieserver_hostname/rest/server
+    $VACSAFE_SERVICE_URL/rest/server
 -----
 
 . Health Check Report
 +
 -----
-$ curl -H "Authorization: Bearer $TKN" -H 'Accept:application/json' $kieserver_hostname/rest/server/healthcheck?report=true
+$ curl -H "Authorization: Bearer $TKN" -H 'Accept:application/json' $VACSAFE_SERVICE_URL/rest/server/healthcheck?report=true
 -----
 
 . View swagger
 +
 -----
-$ curl -v -H "Authorization: Bearer $TKN" $kieserver_hostname/rest/swagger.json | jq .
+$ curl -v -H "Authorization: Bearer $TKN" $VACSAFE_SERVICE_URL/rest/swagger.json | jq .
 -----
 
 . View Swagger UI
@@ -123,19 +150,19 @@ $ curl -v -H "Authorization: Bearer $TKN" $kieserver_hostname/rest/swagger.json 
 Point your browser to the output of the following:
 +
 -----
-$ echo -en "\n$kieserver_hostname/rest/api-docs?url=http://$kieserver_hostname/rest/swagger.json\n"
+$ echo -en "\n$VACSAFE_SERVICE_URL/rest/api-docs?url=$VACSAFE_SERVICE_URL/rest/swagger.json\n"
 -----
 
 . List KIE Containers
 +
 -----
-$ curl -H "Authorization: Bearer $TKN" -X GET $kieserver_hostname/rest/server/containers
+$ curl -H "Authorization: Bearer $TKN" -X GET $VACSAFE_SERVICE_URL/rest/server/containers
 -----
 
 . List process definitions in JSON representation:
 +
 -----
-$ curl -H "Authorization: Bearer $TKN" -X GET -H 'Accept:application/json' $kieserver_hostname/rest/server/containers/$kjar_name/processes/
+$ curl -H "Authorization: Bearer $TKN" -X GET -H 'Accept:application/json' $VACSAFE_SERVICE_URL/rest/server/containers/$kjar_name/processes/
 -----
 
 . Start Test Result Submission Workflow
@@ -144,18 +171,10 @@ $ curl -H "Authorization: Bearer $TKN" -X GET -H 'Accept:application/json' $kies
 $ curl -v -H "Authorization: Bearer $TKN" \
        -X POST \
        -H 'Content-Type:application/json' \
-       $kieserver_hostname/rest/server/containers/$kjar_name/processes/covid_test_result_submission_workflow/instances \
+       $VACSAFE_SERVICE_URL/rest/server/containers/$kjar_name/processes/covid_test_result_submission_workflow/instances \
        -d @vacsafe-service/src/test/resources/testdata/CovidTestResultDocument_POSITIVE.json
 -----
 
-
-. Test
-+
------
-$ mvn clean test \
-     -Daws.accessKeyId=$AWS_ACCESS_KEY_ID \
-     -Daws.secretAccessKey=$AWS_SECRET_ACCESS_KEY
------
 
 == Development
 
@@ -166,6 +185,14 @@ $ mvn clean package -DskipTests && \
          java \
            -Dorg.kie.server.repo=../etc/vacsafe-service/runtime_configs \
            -jar target/vacsafe-service-0.0.1.jar                                 &> /tmp/vacsafe-service.log & 
+-----
+
+. Unit Tests
++
+-----
+$ mvn clean test \
+     -Daws.accessKeyId=$AWS_ACCESS_KEY_ID \
+     -Daws.secretAccessKey=$AWS_SECRET_ACCESS_KEY
 -----
 
 

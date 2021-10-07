@@ -27,6 +27,7 @@
     body: "username={{ sso_admin_user }}&password={{ sso_admin_password }}&grant_type=password&client_id=admin-cli"
     status_code: 200
     validate_certs: no
+  ignore_errors: true
   register: admin_token_result
 
 - name: set admin token fact
