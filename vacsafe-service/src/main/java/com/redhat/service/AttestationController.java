@@ -27,7 +27,6 @@ import com.redhat.vax.model.CovidTestResultDocument;
 import com.redhat.vax.model.Document;
 import com.redhat.vax.model.Employee;
 import com.redhat.vax.model.VaccineCardDocument;
-import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import static com.redhat.service.Constants.*;
 
@@ -59,9 +58,6 @@ public class AttestationController {
     @Value("${s3.bucket.name}")
     private String bucketName;
 
-    @Value("${enable.s3.persistence:false}")
-    private boolean s3PersistenceEnabled;
-
     @Value("${com.redhat.vax.kjar.deployment.id}")
     private String deploymentId;
 
@@ -78,7 +74,7 @@ public class AttestationController {
 
             validate(authentication, employeeIn, document);
 
-            prepareDocumentAndPersistToS3(document, employeeIn, file);
+            prepareDocumentAndPersistToStorage(document, employeeIn, file);
 
             // Start Process
             Map<String, Object> params = Collections.singletonMap("document", document);
@@ -109,7 +105,7 @@ public class AttestationController {
         //     return new ResponseEntity<String>("Unauthorized", HttpStatus.UNAUTHORIZED);
         // }
         try {
-            prepareDocumentAndPersistToS3(document, employeeIn, file);
+            prepareDocumentAndPersistToStorage(document, employeeIn, file);
 
             // Start Process
             Map<String, Object> params = Collections.singletonMap("document", document);
@@ -153,10 +149,10 @@ public class AttestationController {
                 .body(new ByteArrayResource(bytes));
     }
 
-    private void prepareDocumentAndPersistToS3(
+    private void prepareDocumentAndPersistToStorage(
             Document document, 
             Employee employeeIn, 
-            MultipartFile file) throws S3Exception, IOException {
+            MultipartFile file) throws IOException {
         
         validate(employeeIn);
         validate(document);
@@ -169,14 +165,9 @@ public class AttestationController {
         Attachment attachment = createAttachment(file);
         document.setAttachment(attachment);
 
-        // persist document in AWS S3
-        if (s3PersistenceEnabled) {
-            log.debug(">>> S3 bucket: {}", bucketName);
-            String s3uuid = documentService.put(file.getBytes());
-            attachment.setS3UUID(s3uuid);
-        } else {
-            log.warn("AWS S3 is currently disabled. Set enable.s3.persistence=true to enable it.");
-        }
+        log.debug("prepareDocumentAndPersistToStorage()  bucket = : {}", bucketName);
+        String s3uuid = documentService.put(file.getBytes());
+        attachment.setS3UUID(s3uuid);
     }
 
     private Attachment createAttachment(MultipartFile file) {

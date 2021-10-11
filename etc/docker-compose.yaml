@@ -103,6 +103,8 @@ services:
 #    networks:
 #      - app
 
+# Will use a single flat network until the following is fixed in podman:
+#   https://github.com/containers/podman/issues/8399  : DNS resolution works only for one network when two networks are attached
 networks:
     app:
       driver: bridge

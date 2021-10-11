@@ -26,9 +26,9 @@ public class LocalFileService implements IDocumentService {
     @PostConstruct
     public void init() {
         String objectKey = UUID.randomUUID().toString();
-        log.info("Base path for document mgmt = "+documentStorageBaseDir+"/"+objectKey);
         baseDir = new File(documentStorageBaseDir+"/"+objectKey);
-        baseDir.mkdir();
+        baseDir.mkdirs();
+        log.info("init() Base path for document mgmt = "+baseDir.getAbsolutePath());
     }
 
     @Override
