@@ -26,6 +26,13 @@ $ docker-compose -f etc/docker-compose.yaml up -d
 +
 NOTE:  If underlying linux container system in use in your local environment is podman, then follow this link:https://fedoramagazine.org/use-docker-compose-with-podman-to-orchestrate-containers-on-fedora/[set-up guide].
 
+. Add DNS mappings to /etc/hosts for the following two services:  _vacsafe-service_ and _sso-service_
++
+-----
+$ cat /etc/hosts
+
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 sso-service vacsafe-service
+-----
 
 . Stop application pod with all linux containers:
 +
@@ -43,9 +50,9 @@ Set the following environment variables with values similar to the following:
 . if testing locally deployed application (via docker-compose):
 +
 -----
-RHSSO_URL=http://localhost:4080
+RHSSO_URL=http://localhost:8080
 REALM_ID=vacsafeRealm
-retrieve_token_url="http://$RHSSO_URL/auth/realms/$REALM_ID/protocol/openid-connect/token"
+retrieve_token_url="$RHSSO_URL/auth/realms/$REALM_ID/protocol/openid-connect/token"
 VACSAFE_SERVICE_URL=http://localhost:9080
 kjar_name=vacsafe-kjar
 -----

@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<BirthDatePicker /> should match existing snapshot 1`] = `
+<Component
+  name="dateOfBirth"
+  render={[Function]}
+  rules={
+    Object {
+      "pattern": /\\^\\(0\\[1-9\\]\\|1\\[0-2\\]\\)\\\\-\\(0\\[1-9\\]\\|1\\\\d\\|2\\\\d\\|3\\[01\\]\\)\\\\-\\(19\\|20\\)\\\\d\\{2\\}\\$/,
+      "required": true,
+      "validate": [Function],
+    }
+  }
+/>
+`;

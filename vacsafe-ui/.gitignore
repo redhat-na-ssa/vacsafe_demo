@@ -1,0 +1,12 @@
+.DS_Store
+.idea
+.env
+
+**/node_modules
+dist
+yarn-error.log
+stats.json
+coverage
+storybook-static
+keycloak/keycloak.json
+public/config.js

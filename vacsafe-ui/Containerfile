@@ -1,0 +1,9 @@
+FROM registry.access.redhat.com/ubi8/nginx-118
+
+RUN rm -rf /opt/app-root/src/*
+COPY dist .
+
+VOLUME /opt/nginx-config
+
+# Run script uses standard ways to run the application 
+CMD nginx -g "daemon off;" -c /opt/nginx-config/nginx.conf

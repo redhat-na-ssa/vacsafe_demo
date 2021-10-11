@@ -1,0 +1,14 @@
+// Load the Ploigos Jenkins Library
+library identifier: 'ploigos-workflows@main',
+retriever: modernSCM([
+    $class: 'GitSCMSource',
+    remote: 'https://gitea-devsecops.apps.prod-openshift.z6w9.p1.openshiftapps.com/platform/ploigos-workflows.git'
+])
+
+basicWorkflow(
+    stepRunnerConfigDir: 'cicd/ploigos-software-factory-operator/config/',
+    pgpKeysSecretName: 'ploigos-gpg-key',
+    workflowServiceAccountName: 'jenkins',
+    separatePlatformConfig: true,
+    verbose: true,
+)

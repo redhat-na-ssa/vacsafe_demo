@@ -31,7 +31,7 @@
   </configuration>
   <containers>
     <container>
-      <containerId>vacsafe-0.0.1</containerId>
+      <containerId>vacsafe-kjar-0.0.1</containerId>
       <releaseId>
         <groupId>com.redhat.vacsafe</groupId>
         <artifactId>vacsafe-kjar</artifactId>

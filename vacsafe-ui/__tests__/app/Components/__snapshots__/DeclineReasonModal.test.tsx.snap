@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DeclineReasonModal /> should match existing snapshot 1`] = `
+<Modal
+  actions={
+    Array [
+      <Button
+        icon={
+          <CheckCircleIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+          />
+        }
+        onClick={[Function]}
+        variant="primary"
+      >
+        Confirm
+      </Button>,
+      <Button
+        onClick={[Function]}
+        variant="plain"
+      >
+        Cancel
+      </Button>,
+    ]
+  }
+  appendTo={[Function]}
+  aria-describedby=""
+  aria-label=""
+  aria-labelledby=""
+  className=""
+  hasNoBodyWrapper={false}
+  isOpen={false}
+  onClose={[Function]}
+  ouiaSafe={true}
+  showClose={true}
+  title="Reason For Decline - Select Most Appropriate"
+  titleIconVariant={null}
+  titleLabel=""
+  variant="medium"
+>
+  <Stack
+    hasGutter={true}
+  >
+    <Radio
+      className=""
+      id="radio-controlled-0"
+      isChecked={false}
+      isDisabled={false}
+      isValid={true}
+      key="radio-0"
+      label="Attachments not legible"
+      name="radio-0"
+      onChange={[Function]}
+      value="Attachments not legible"
+    />
+    <Radio
+      className=""
+      id="radio-controlled-1"
+      isChecked={false}
+      isDisabled={false}
+      isValid={true}
+      key="radio-1"
+      label="Supporting document missing vaccine information"
+      name="radio-1"
+      onChange={[Function]}
+      value="Supporting document missing vaccine information"
+    />
+    <Radio
+      className=""
+      id="radio-controlled-2"
+      isChecked={false}
+      isDisabled={false}
+      isValid={true}
+      key="radio-2"
+      label="Supporting document missing name and/or DOB"
+      name="radio-2"
+      onChange={[Function]}
+      value="Supporting document missing name and/or DOB"
+    />
+    <Radio
+      className=""
+      id="radio-controlled-3"
+      isChecked={false}
+      isDisabled={false}
+      isValid={true}
+      key="radio-3"
+      label="Not a valid form of supporting documentation"
+      name="radio-3"
+      onChange={[Function]}
+      value="Not a valid form of supporting documentation"
+    />
+    <Radio
+      className=""
+      id="radio-controlled-4"
+      isChecked={false}
+      isDisabled={false}
+      isValid={true}
+      key="radio-4"
+      label="Supporting documentation mismatch with employee information"
+      name="radio-4"
+      onChange={[Function]}
+      value="Supporting documentation mismatch with employee information"
+    />
+    <Radio
+      className=""
+      id="radio-controlled-5"
+      isChecked={false}
+      isDisabled={false}
+      isValid={true}
+      key="radio-5"
+      label="Supporting documentation provided is a copy of the wrong side of the card"
+      name="radio-5"
+      onChange={[Function]}
+      value="Supporting documentation provided is a copy of the wrong side of the card"
+    />
+  </Stack>
+</Modal>
+`;

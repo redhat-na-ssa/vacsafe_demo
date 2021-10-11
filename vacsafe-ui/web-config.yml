@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: web-config
+data:
+    web.properties: |
+        window.API_URL= "api.kubernetes.com"

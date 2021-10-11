@@ -62,6 +62,8 @@ public class AttestationController {
     @Value("${enable.s3.persistence:false}")
     private boolean s3PersistenceEnabled;
 
+    @Value("${com.redhat.vax.kjar.deployment.id}")
+    private String deploymentId;
 
     @PostMapping("covid-test-result")
     public ResponseEntity<String> covidTestResultUpload
@@ -80,7 +82,7 @@ public class AttestationController {
 
             // Start Process
             Map<String, Object> params = Collections.singletonMap("document", document);
-            long pid = processService.startProcess(KJAR_DEPLOYMENT_ID, COVID_TEST_RESULT_SUBMISSION_WORKFLOW, params);
+            long pid = processService.startProcess(deploymentId, COVID_TEST_RESULT_SUBMISSION_WORKFLOW, params);
             log.info("COVID test result submission workflow started. PID: {} \n{}", pid, document);
 
             return ResponseEntity.accepted().build();
@@ -111,7 +113,7 @@ public class AttestationController {
 
             // Start Process
             Map<String, Object> params = Collections.singletonMap("document", document);
-            long pid = processService.startProcess(KJAR_DEPLOYMENT_ID, VACCINE_CARD_REVIEW_WORKFLOW, params);
+            long pid = processService.startProcess(deploymentId, VACCINE_CARD_REVIEW_WORKFLOW, params);
             log.info("Vaccine document submission workflow started. PID: {} \n{}", pid, document);
 
             return ResponseEntity.accepted().build();

@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<GenericResponseModal /> should match existing snapshot 1`] = `
+<Modal
+  actions={
+    Array [
+      <Button
+        onClick={[Function]}
+        variant="tertiary"
+      >
+        Close
+      </Button>,
+    ]
+  }
+  appendTo={[Function]}
+  aria-describedby=""
+  aria-label=""
+  aria-labelledby=""
+  className=""
+  hasNoBodyWrapper={false}
+  isOpen={false}
+  onClose={[Function]}
+  ouiaSafe={true}
+  showClose={true}
+  title=""
+  titleIconVariant={null}
+  titleLabel=""
+  variant="small"
+/>
+`;
+
+exports[`<ResponseErrorModal /> should match existing snapshot 1`] = `
+<Modal
+  actions={
+    Array [
+      <Button
+        onClick={[Function]}
+        variant="tertiary"
+      >
+        Close
+      </Button>,
+    ]
+  }
+  appendTo={[Function]}
+  aria-describedby=""
+  aria-label=""
+  aria-labelledby=""
+  className=""
+  hasNoBodyWrapper={false}
+  isOpen={false}
+  onClose={[Function]}
+  ouiaSafe={true}
+  showClose={true}
+  title="Error Submitting Form"
+  titleIconVariant={null}
+  titleLabel=""
+  variant="small"
+>
+  <ServerError />
+</Modal>
+`;

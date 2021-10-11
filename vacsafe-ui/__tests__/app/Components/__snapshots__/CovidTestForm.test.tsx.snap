@@ -1,0 +1,264 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CovidTestForm /> should match existing snapshot 1`] = `
+<Form
+  onSubmit={[Function]}
+>
+  <FormGroup
+    fieldId="employee-id"
+    helperText="Make sure this matches your ID."
+    label="Person ID"
+  >
+    <TextInput
+      aria-label="employee-id"
+      isDisabled={true}
+      type="text"
+    />
+  </FormGroup>
+  <FormGroup
+    fieldId="employee-full-name"
+    helperText="Make sure this matches your full name."
+    label="Full Name"
+  >
+    <TextInput
+      aria-label="employee-full-name"
+      isDisabled={true}
+      type="text"
+    />
+  </FormGroup>
+  <Component
+    control={
+      Object {
+        "_defaultValues": Object {},
+        "_fields": Object {},
+        "_formState": Object {
+          "dirtyFields": Object {},
+          "errors": Object {},
+          "isDirty": false,
+          "isSubmitSuccessful": false,
+          "isSubmitted": false,
+          "isSubmitting": false,
+          "isValid": false,
+          "isValidating": false,
+          "submitCount": 0,
+          "touchedFields": Object {},
+        },
+        "_formValues": Object {},
+        "_getFieldArrayValue": [Function],
+        "_getIsDirty": [Function],
+        "_getWatch": [Function],
+        "_isInAction": false,
+        "_isMounted": false,
+        "_names": Object {
+          "array": Set {},
+          "mount": Set {},
+          "unMount": Set {},
+          "watch": Set {},
+        },
+        "_proxyFormState": Object {
+          "dirtyFields": false,
+          "errors": false,
+          "isDirty": false,
+          "isValid": false,
+          "isValidating": false,
+          "touchedFields": false,
+        },
+        "_removeFields": [Function],
+        "_shouldUnregister": undefined,
+        "_subjects": Object {
+          "array": ge {
+            "observers": Array [],
+          },
+          "control": ge {
+            "observers": Array [],
+          },
+          "state": ge {
+            "observers": Array [],
+          },
+          "watch": ge {
+            "observers": Array [],
+          },
+        },
+        "_updateFieldArray": [Function],
+        "_updateProps": [Function],
+        "_updateValid": [Function],
+        "_updateValues": [Function],
+        "register": [Function],
+        "unregister": [Function],
+      }
+    }
+    defaultValue=""
+    name="test_results"
+    render={[Function]}
+    rules={
+      Object {
+        "required": true,
+      }
+    }
+  />
+  <Component
+    control={
+      Object {
+        "_defaultValues": Object {},
+        "_fields": Object {},
+        "_formState": Object {
+          "dirtyFields": Object {},
+          "errors": Object {},
+          "isDirty": false,
+          "isSubmitSuccessful": false,
+          "isSubmitted": false,
+          "isSubmitting": false,
+          "isValid": false,
+          "isValidating": false,
+          "submitCount": 0,
+          "touchedFields": Object {},
+        },
+        "_formValues": Object {},
+        "_getFieldArrayValue": [Function],
+        "_getIsDirty": [Function],
+        "_getWatch": [Function],
+        "_isInAction": false,
+        "_isMounted": false,
+        "_names": Object {
+          "array": Set {},
+          "mount": Set {},
+          "unMount": Set {},
+          "watch": Set {},
+        },
+        "_proxyFormState": Object {
+          "dirtyFields": false,
+          "errors": false,
+          "isDirty": false,
+          "isValid": false,
+          "isValidating": false,
+          "touchedFields": false,
+        },
+        "_removeFields": [Function],
+        "_shouldUnregister": undefined,
+        "_subjects": Object {
+          "array": ge {
+            "observers": Array [],
+          },
+          "control": ge {
+            "observers": Array [],
+          },
+          "state": ge {
+            "observers": Array [],
+          },
+          "watch": ge {
+            "observers": Array [],
+          },
+        },
+        "_updateFieldArray": [Function],
+        "_updateProps": [Function],
+        "_updateValid": [Function],
+        "_updateValues": [Function],
+        "register": [Function],
+        "unregister": [Function],
+      }
+    }
+    defaultValue=""
+    name="test_date"
+    render={[Function]}
+    rules={
+      Object {
+        "pattern": /\\^\\(0\\[1-9\\]\\|1\\[0-2\\]\\)\\\\-\\(0\\[1-9\\]\\|1\\\\d\\|2\\\\d\\|3\\[01\\]\\)\\\\-\\(19\\|20\\)\\\\d\\{2\\}\\$/,
+        "required": true,
+        "validate": [Function],
+      }
+    }
+  />
+  <Component
+    control={
+      Object {
+        "_defaultValues": Object {},
+        "_fields": Object {},
+        "_formState": Object {
+          "dirtyFields": Object {},
+          "errors": Object {},
+          "isDirty": false,
+          "isSubmitSuccessful": false,
+          "isSubmitted": false,
+          "isSubmitting": false,
+          "isValid": false,
+          "isValidating": false,
+          "submitCount": 0,
+          "touchedFields": Object {},
+        },
+        "_formValues": Object {},
+        "_getFieldArrayValue": [Function],
+        "_getIsDirty": [Function],
+        "_getWatch": [Function],
+        "_isInAction": false,
+        "_isMounted": false,
+        "_names": Object {
+          "array": Set {},
+          "mount": Set {},
+          "unMount": Set {},
+          "watch": Set {},
+        },
+        "_proxyFormState": Object {
+          "dirtyFields": false,
+          "errors": false,
+          "isDirty": false,
+          "isValid": false,
+          "isValidating": false,
+          "touchedFields": false,
+        },
+        "_removeFields": [Function],
+        "_shouldUnregister": undefined,
+        "_subjects": Object {
+          "array": ge {
+            "observers": Array [],
+          },
+          "control": ge {
+            "observers": Array [],
+          },
+          "state": ge {
+            "observers": Array [],
+          },
+          "watch": ge {
+            "observers": Array [],
+          },
+        },
+        "_updateFieldArray": [Function],
+        "_updateProps": [Function],
+        "_updateValid": [Function],
+        "_updateValues": [Function],
+        "register": [Function],
+        "unregister": [Function],
+      }
+    }
+    name="test_image_file"
+    render={[Function]}
+    rules={
+      Object {
+        "required": true,
+      }
+    }
+  />
+  <FormGroup
+    fieldId="accept-test-buttons"
+  >
+    <Button
+      icon={
+        <CheckCircleIcon
+          color="currentColor"
+          noVerticalAlign={false}
+          size="sm"
+        />
+      }
+      type="submit"
+      variant="primary"
+    >
+      Accept
+    </Button>
+    <Button
+      onClick={[Function]}
+      variant="plain"
+    >
+      Back
+    </Button>
+  </FormGroup>
+</Form>
+`;

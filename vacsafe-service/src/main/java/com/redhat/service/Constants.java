@@ -21,7 +21,7 @@ public final class Constants {
     public static final String EMPLOYEE_EMAIL_FIELD_NAME = "employeeEmail";
     public static final String EMPLOYEE_AGENCY_CODE_FIELD_NAME = "employeeAgencyCode";
 
-    public static final String KJAR_DEPLOYMENT_ID = System.getProperty("com.redhat.vax.kjar.deployment.id", "nc-vax-kjar-1_0-SNAPSHOT");
+    public static final String KJAR_DEPLOYMENT_ID = System.getProperty("com.redhat.vax.kjar.deployment.id", "vacsafe-kjar");
     public static final String VACCINE_CARD_REVIEW_WORKFLOW = "vax_card_review_workflow";
     public static final String COVID_TEST_RESULT_REVIEW_WORKFLOW = "covid_test_result_review_workflow";
     public static final String COVID_TEST_RESULT_SUBMISSION_WORKFLOW = "covid_test_result_submission_workflow";

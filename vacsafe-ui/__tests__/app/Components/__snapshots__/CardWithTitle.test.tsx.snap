@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CardWithTitle /> should match existing snapshot 1`] = `
+<CardTitle>
+  <Text
+    component="p"
+  />
+  <TextContent>
+    <Text
+      component="small"
+    />
+  </TextContent>
+</CardTitle>
+`;

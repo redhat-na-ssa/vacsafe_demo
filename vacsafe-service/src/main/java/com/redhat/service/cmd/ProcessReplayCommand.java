@@ -38,6 +38,8 @@ public class ProcessReplayCommand implements Command {
         System.getenv("PROCESS_REPLAY_CMD_ENABLED") !=  null ?
         Boolean.valueOf(System.getenv("PROCESS_REPLAY_CMD_ENABLED")) : false;
 
+    private String deploymentId = "vacsafe-kjar-0.0.1";
+
     @Override
     public ExecutionResults execute(CommandContext ctx) throws Exception {
 
@@ -109,7 +111,7 @@ public class ProcessReplayCommand implements Command {
                     em.getTransaction().begin();
                     deleteTaskDocumentMapping(em, document.getId(), dryRun);
 
-                    long newPid = processService.startProcess(Constants.KJAR_DEPLOYMENT_ID, PROCESS_DEF, params);
+                    long newPid = processService.startProcess(deploymentId, PROCESS_DEF, params);
                     processService.abortProcessInstance(pid);
                     em.getTransaction().commit();
                 }

@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<EmployeeInfoCard /> should match existing snapshot 1`] = `
+<Card>
+  <CardWithTitle
+    title="Employee Information"
+  />
+  <CardBody>
+    <Form>
+      <FormGroup
+        fieldId="profile-form-employee-id"
+        label="Person ID"
+      >
+        <TextInput
+          aria-label="profile-input-employee-id"
+          isDisabled={true}
+          type="text"
+        />
+      </FormGroup>
+      <FormGroup
+        fieldId="profile-form-employee-name"
+        label="Name"
+      >
+        <TextInput
+          aria-label="profile-input-employee-name"
+          isDisabled={true}
+          type="text"
+        />
+      </FormGroup>
+      <FormGroup
+        fieldId="profile-form-employee-dob"
+        label="Date of Birth"
+      >
+        <TextInput
+          aria-label="profile-input-employee-dob"
+          isDisabled={true}
+          type="text"
+          value=""
+        />
+      </FormGroup>
+      <FormGroup
+        fieldId="profile-form-employee-email"
+        label="Email"
+      >
+        <TextInput
+          aria-label="profile-input-employee-email"
+          isDisabled={true}
+          type="text"
+        />
+      </FormGroup>
+      <FormGroup
+        fieldId="profile-form-agency"
+        label="Agency"
+      >
+        <TextInput
+          aria-label="profile-input-agency"
+          isDisabled={true}
+          type="text"
+        />
+      </FormGroup>
+      <FormGroup
+        fieldId="profile-form-division"
+        label="Division"
+      >
+        <TextInput
+          aria-label="profile-input-division"
+          isDisabled={true}
+          type="text"
+        />
+      </FormGroup>
+    </Form>
+  </CardBody>
+</Card>
+`;

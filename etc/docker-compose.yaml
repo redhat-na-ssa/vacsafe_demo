@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
 
-  psql_sso:
+  psql-sso:
     image: registry.redhat.io/rhel8/postgresql-12:1-72.1626836556
     restart: always
     ports:
@@ -19,16 +19,16 @@ services:
         source: ./sso/db/sso-psql.conf
         target: /opt/app-root/src/postgresql-cfg/sso-psql.conf
     networks:
-      - sso
+      - app
 
-  sso:
+  sso-service:
     image: registry.redhat.io/rh-sso-7/sso74-openshift-rhel8:7.4-36
     restart: always
     ports:
-      - "4443:8443"
-      - "4080:8080"
+      - "8443:8443"
+      - "8080:8080"
     environment:
-      SSO_POSTGRESQL_SERVICE_HOST: psql_sso
+      SSO_POSTGRESQL_SERVICE_HOST: psql-sso
       SSO_POSTGRESQL_SERVICE_PORT: 4432
       DB_SERVICE_PREFIX_MAPPING: "sso-postgresql=DB"
       DB_JNDI: "java:jboss/datasources/KeycloakDS"
@@ -46,12 +46,12 @@ services:
         source: ./sso/vacsafe-realm.json
         target: /opt/vacsafe-realm.json
     depends_on:
-      - psql_sso
+      - psql-sso
     networks:
-      - sso
+      - app
 
 
-  psql_vacsafe:
+  psql-vacsafe:
     image: registry.redhat.io/rhel8/postgresql-12:1-72.1626836556
     restart: always
     ports:
@@ -74,11 +74,10 @@ services:
         source: ./vacsafe-service/create_rhpam_database.sh
         target: /opt/app-root/src/postgresql-start/create_rhpam_database.sh
     networks:
-      - default
+      - app
 
 #  vacsafe-service:
-#    auto_up: false
-#    image: quay.io/redhat_naps_da/rhpam-springboot:0.0.2
+#    image: quay.io/redhat_naps_da/vacsafe-service:0.0.1
 #    restart: always
 #    ports:
 #      - "9080:9080"
@@ -87,24 +86,23 @@ services:
 #      JAVA_INITIAL_MEM_RATIO: '0'
 #      GC_MAX_METASPACE_SIZE: '500'
 #      SPRING_CONFIG_LOCATION: "file:///deployments/config/application.properties"
-#
-#      # org.kie.server.repo: dictates to kie-server where to find its KIE container configuration file
-#      # kie.maven.settings.custom: dictates to kie-server where to fine its artifact repo of KJars
+
+      # org.kie.server.repo: dictates to kie-server where to find its KIE container configuration file
+      # kie.maven.settings.custom: dictates to kie-server where to fine its artifact repo of KJars
 #      JAVA_OPTS_APPEND: '-Dorg.kie.server.repo=/deployments/config -Dkie.maven.settings.custom=/m2/settings.xml'
-#
-#      # Optional: Change to URL of Nexus (if in use)
+
+      # Optional: Change to URL of Nexus (if in use)
 #      MAVEN_MIRROR_URL: ''
 #    volumes:
 #      - type: bind
 #        source: ./vacsafe-service/runtime_configs
 #        target: /deployments/config/
 #    depends_on:
-#      - psql_vacsafe
+#      - psql-vacsafe
+#      - sso-service
 #    networks:
-#      - default
+#      - app
 
 networks:
-  default:
-    driver: bridge
-  sso:
-    driver: bridge
+    app:
+      driver: bridge

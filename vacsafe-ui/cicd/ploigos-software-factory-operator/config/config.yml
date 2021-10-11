@@ -1,0 +1,57 @@
+---
+step-runner-config:
+  config-decryptors:
+  - implementer: SOPS
+
+  global-defaults:
+    organization: nc
+    application-name: rhvcs
+    service-name: ui
+
+  generate-metadata:
+  - implementer: Npm
+  - implementer: Git
+  - implementer: SemanticVersion
+
+  tag-source:
+    - implementer: Git
+
+  unit-test:
+  - implementer: ploigos_step_runner.step_implementers.shared.NpmGeneric
+    config:
+      npm-args:
+      - run
+      - test:pipeline
+
+  package:
+  - implementer: ploigos_step_runner.step_implementers.shared.NpmGeneric
+    config:
+      npm-args:
+      - run
+      - build
+
+  create-container-image:
+  - implementer: Buildah
+
+  push-container-image:
+  - implementer: Skopeo
+
+  deploy:
+  - implementer: ArgoCD
+    config:
+      deployment-config-repo: 
+      deployment-config-helm-chart-path: charts/rhvcs-ui-deploy
+      deployment-config-helm-chart-values-file-image-tag-yq-path: 'image.tag'
+      force-push-tags: True
+    environment-config:
+      DEV:
+        deployment-config-helm-chart-environment-values-file: values-DEV.yaml
+      DEVTEST:
+        deployment-config-helm-chart-environment-values-file: values-DEVTEST.yaml
+      TEST:
+        deployment-config-helm-chart-environment-values-file: values-TEST.yaml
+      PROD:
+        deployment-config-helm-chart-environment-values-file: values-PROD.yaml
+
+  report:
+  - implementer: ResultArtifactsArchive

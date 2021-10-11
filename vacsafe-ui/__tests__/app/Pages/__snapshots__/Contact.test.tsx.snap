@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Contact Page should match existing snapshot 1`] = `
+<Card
+  isRounded={true}
+>
+  <CardWithTitle
+    info="If you need more information, use link below."
+    title="Help"
+  />
+  <CardBody>
+    <Button
+      component="a"
+      href="https://oshr.nc.gov/covid-19-vaccination-or-testing-faqs"
+      icon={
+        <ExternalLinkAltIcon
+          color="currentColor"
+          noVerticalAlign={false}
+          size="sm"
+        />
+      }
+      target="_blank"
+      variant="link"
+    >
+      Vaccination and Testing FAQ
+    </Button>
+  </CardBody>
+  <CardFooter>
+    <Button
+      onClick={[Function]}
+      variant="plain"
+    >
+      Back
+    </Button>
+  </CardFooter>
+</Card>
+`;

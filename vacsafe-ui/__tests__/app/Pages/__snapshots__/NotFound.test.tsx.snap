@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NotFound Page should match existing snapshot 1`] = `
+<PageSection>
+  <EmptyState
+    variant="full"
+  >
+    <EmptyStateIcon
+      icon={[Function]}
+    />
+    <Title
+      headingLevel="h1"
+      size="lg"
+    >
+      404 Page not found
+    </Title>
+    <EmptyStateBody>
+      We didn't find a page that matches the address you navigated to.
+    </EmptyStateBody>
+    <GoHomeBtn />
+  </EmptyState>
+</PageSection>
+`;

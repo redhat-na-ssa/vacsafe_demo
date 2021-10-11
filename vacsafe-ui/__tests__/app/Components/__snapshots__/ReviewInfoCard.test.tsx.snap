@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ReviewInfoCard /> should match existing snapshot 1`] = `
+<Card>
+  <CardWithTitle
+    title="Review Information"
+  />
+  <CardBody>
+    <Form>
+      <HRActionInfo />
+      <ReviewTypeInfo />
+    </Form>
+  </CardBody>
+</Card>
+`;

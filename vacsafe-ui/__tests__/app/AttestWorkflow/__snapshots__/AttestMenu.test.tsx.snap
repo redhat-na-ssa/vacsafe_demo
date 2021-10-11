@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AttestWorkflow - AttestMenu should match existing snapshot 1`] = `
+<Card
+  isRounded={true}
+>
+  <CardWithTitle
+    info="Please select from the following:"
+    title="Menu"
+  />
+  <CardBody>
+    <Stack
+      hasGutter={true}
+    >
+      <Button
+        icon={
+          <FileUploadIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+          />
+        }
+        id="submit-vax-card-menu-button"
+        isSmall={true}
+        onClick={[Function]}
+        variant="tertiary"
+      >
+        <Text>
+          Submit Vaccination Record
+        </Text>
+        <Text>
+          Supporting Document Upload Required
+        </Text>
+      </Button>
+      <Button
+        icon={
+          <FileUploadIcon
+            color="currentColor"
+            noVerticalAlign={false}
+            size="sm"
+          />
+        }
+        id="submit-vax-test-menu-button"
+        isSmall={true}
+        onClick={[Function]}
+        variant="tertiary"
+      >
+        <Text>
+          Submit COVID Test Results
+        </Text>
+        <Text>
+          Supporting Document Upload Required
+        </Text>
+      </Button>
+    </Stack>
+  </CardBody>
+  <CardFooter>
+    <Button
+      onClick={[Function]}
+      variant="plain"
+    >
+      Back
+    </Button>
+  </CardFooter>
+</Card>
+`;

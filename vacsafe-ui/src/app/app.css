@@ -1,0 +1,15 @@
+/* Do not Just write CSS! Use Patternfly components. 
+If there is customization, do it in the patternfly theming.
+https://www.patternfly.org/v4/developer-resources/global-css-variables
+*/
+html, body, #root {
+  height: 100%;
+}
+
+.warningText {
+  color: #C9190B;
+}
+
+.indentList {
+  padding-left: 10px;
+}

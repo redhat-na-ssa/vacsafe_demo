@@ -1,0 +1,5 @@
+// Get these values from Onboarding Documentation
+window.REACT_APP_PAM_URL_BASE = ""
+window.REACT_APP_PAM_USER = ""
+window.REACT_APP_PAM_PASSWORD = ""
+window.REACT_APP_PAM_CONTAINER_ID=""

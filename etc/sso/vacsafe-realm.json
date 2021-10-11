@@ -849,7 +849,9 @@
          "clientAuthenticatorType":"client-secret",
          "secret":"**********",
          "redirectUris":[
+            "http://vacsafe-service:9080/*",
             "http://localhost:9080/*",
+            "http://vacsafe-ui:9000/*",
             "http://localhost:9000/*"
          ],
          "webOrigins":[
