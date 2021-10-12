@@ -1,0 +1,5 @@
+{
+  "auth-server-url": "{{ sso_url }}/auth",
+  "realm": "{{ sso_realm_id }}",
+  "resource": "{{ sso_clientId }}"
+}

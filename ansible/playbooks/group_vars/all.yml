@@ -25,7 +25,7 @@ sso_siteadmin_password: r3dh4t1!
 # If set to True, then every user that creates an account in demo will automatically be a "realm-admin"
 set_realm_admin_as_default: false
 
-sso_realm_id: "{{ project_admin }}-{{ project_name }}"
+sso_realm_id: "{{ project_name }}"
 
 sso_clientId: "vacsafe"
 

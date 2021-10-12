@@ -1,6 +1,6 @@
 # mvn clean package
-# buildah bud -f vacsafe-service/src/main/docker/Dockerfile -t quay.io/redhat_naps_da/vacsafe-service:0.0.1 vacsafe-service
-# podman push quay.io/redhat_naps_da/vacsafe-service:0.0.1
+# buildah bud -f vacsafe-service/src/main/docker/Dockerfile -t quay.io/redhat_naps_da/vacsafe-service:0.0.2 vacsafe-service
+# podman push quay.io/redhat_naps_da/vacsafe-service:0.0.2
 
 # https://github.com/Emergency-Response-Demo/container-images/tree/master/ubi8-java11-mvn
 FROM quay.io/emergencyresponsedemo/ubi8-jdk-11-mvn:0.0.2

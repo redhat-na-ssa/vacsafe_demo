@@ -40,10 +40,18 @@
     vacsafe_service_hostname: "{{ vacsafe_service }}-{{ project_name }}.{{ ocp_domain }}"
     sso_url: "https://{{ sso_route_cmd.stdout }}"
 
-- name: copy env.js file to work directory
+- name: create config work directory
+  file:
+    name: "{{ work_dir }}/configs"
+    state: directory
+
+- name: copy env.js and keycloak.js files to work directory
   template:
-    src: "{{ resources_dir }}/env.js"
-    dest: "{{ work_dir }}/env.js"
+    src: "{{ resources_dir }}/config.js"
+    dest: "{{ work_dir }}/configs/config.js"
+- template:
+    src: "{{ resources_dir }}/keycloak.json"
+    dest: "{{ work_dir }}/configs/keycloak.json"
 
 - name: create {{ application_name }} configmap
   oc_configmap:
@@ -52,13 +60,12 @@
     name: "{{ application_name }}"
     namespace: "{{ namespace }}"
     from_file:
-      dir: "{{ work_dir }}/env.js"
+      dir: "{{ work_dir }}/configs"
 
 - name: copy application template
   template:
     src: "{{ resources_dir }}/{{ application_template }}"
     dest: "{{ work_dir }}/{{ application_template }}"
-
 
 - name: deploy {{ application_name }} application
   oc_list:

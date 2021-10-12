@@ -842,15 +842,14 @@
          "useTemplateMappers":false
       },
       {
-         "clientId":"kie-server",
-         "name":"kie-server",
+         "clientId":"{{ sso_clientId }}",
+         "name":"{{ sso_clientId }}",
          "surrogateAuthRequired":false,
          "enabled":true,
          "clientAuthenticatorType":"client-secret",
          "secret":"**********",
          "redirectUris":[
-            "http://localhost:9080/*",
-            "http://localhost:9000/*"
+            "{{ vacsafe_ui_route_url }}/*"
          ],
          "webOrigins":[
             "+"

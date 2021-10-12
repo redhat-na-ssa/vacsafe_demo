@@ -28,7 +28,7 @@ items:
       - name: http
         port: 8080
         protocol: TCP
-        targetPort: 7080
+        targetPort: 8080
     selector:
       group: vacsafe
       app: {{ application_name }}
@@ -65,12 +65,12 @@ items:
           - image: {{ image_name }}:{{ image_tag }}
             name: {{ application_name }}
             ports:
-            - containerPort: 7080
+            - containerPort: 8080
             livenessProbe:
               failureThreshold: 3
               httpGet:
                 path: /
-                port: 7080
+                port: 8080
                 scheme: HTTP
               initialDelaySeconds: 30
               periodSeconds: 30
@@ -79,7 +79,7 @@ items:
               failureThreshold: 3
               httpGet:
                 path: /
-                port: 7080
+                port: 8080
                 scheme: HTTP
               initialDelaySeconds: 30
               periodSeconds: 30
@@ -88,25 +88,13 @@ items:
               limits:
                 memory: "1Gi"
                 cpu: "500m"
-            env:
-              - name: KIE_SERVER_URL
-                value: 'http:\/\/{{ vacsafe_service }}:8080'
-              - name: KIE_SERVER_USERID
-                value: "kieserver"
-              - name: KIE_SERVER_PASSWORD
-                value: "{{ vacsafe_service_api_passwd }}"
-              - name: DM_CONTAINER_ALIAS
-                value: ""
-              - name: PAM_CONTAINER_ALIAS
-                value: "{{ vacsafe_service_deployment_name }}"
-              - name: PROCESS_ID
-                value: "{{ vacsafe_test_result_submittion_process_id }}"
-              - name: IS_OPENSHIFT
-                value: "true"
             volumeMounts:
-            - name: env
-              mountPath: /opt/app-root/src/assets/js/env.js
-              subPath: env.js
+            - name: configs
+              mountPath: /opt/app-root/src/public/config.js
+              subPath: config.js
+            - name: configs
+              mountPath: /opt/app-root/src/keycloak.json
+              subPath: keycloak.json
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
@@ -117,7 +105,7 @@ items:
         volumes:
         - configMap:
             name: {{ application_name }}
-          name: env
+          name: configs
     triggers:
       - type: ConfigChange
       - imageChangeParams:
