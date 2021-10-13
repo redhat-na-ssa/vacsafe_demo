@@ -93,7 +93,8 @@
             "kie-server",
             "kiemgmt",
             "rest-all",
-            "AG-COVIDSafe-Approver"
+            "AG-COVIDSafe-Approver",
+            "VacSafe-APR-IT"
          ],
          "clientRoles":{
             "account":[
@@ -129,7 +130,8 @@
             "applicant",
             "kie-server",
             "user",
-            "AG-COVIDSafe-Approver"
+            "AG-COVIDSafe-Approver",
+            "VacSafe-APR-IT"
          ],
          "clientRoles":{
             "account":[

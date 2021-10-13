@@ -46,6 +46,7 @@ public class QueryController {
         try {
             return ResponseEntity.ok(queryService.getEmployee(id, agencyName));
         } catch(NoResultException e) {
+            log.error("getEmployee() not found for: {} : {}", id, agencyName);
             return ResponseEntity.notFound().build();
         }
     }

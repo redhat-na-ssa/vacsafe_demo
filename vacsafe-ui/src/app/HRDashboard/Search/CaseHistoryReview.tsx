@@ -141,7 +141,7 @@ const CaseHistoryReview: React.FunctionComponent = () => {
 
     const acceptData = {
       "documentReview": {
-        "gov.nc.vax.model.DocumentReview" : {
+        "com.redhat.vax.model.DocumentReview" : {
             "reviewerEmployeeId": reviewerEmployeeId,
             "outcome": outcome,
             "reviewerNotes": rejectReason,

@@ -66,12 +66,12 @@ const InboxReview: React.FunctionComponent = () => {
     })
     .then(res => {
       const resData = res.data['task-input-data']['document'];
-      const infoEntries = resData['gov.nc.vax.model.VaccineCardDocument'];
-      const employeeInfo = infoEntries['employee']['gov.nc.vax.model.Employee']
-      const vaccineBrand = infoEntries['vaccineBrand']['gov.nc.vax.model.VaccineBrand']
+      const infoEntries = resData['com.redhat.vax.model.VaccineCardDocument'];
+      const employeeInfo = infoEntries['employee']['com.redhat.vax.model.Employee']
+      const vaccineBrand = infoEntries['vaccineBrand']['com.redhat.vax.model.VaccineBrand']
       const vaccineShotDate = infoEntries['vaccineAdministrationDate']
       const dateOfBirth = employeeInfo['dateOfBirth']
-      const resAttachment = infoEntries['attachment']['gov.nc.vax.model.Attachment']
+      const resAttachment = infoEntries['attachment']['com.redhat.vax.model.Attachment']
       setIsCovidReport(false)
       setVaxBrand(vaccineBrand)
       setEmployeeId(employeeInfo['id'])
@@ -107,7 +107,7 @@ const InboxReview: React.FunctionComponent = () => {
 
     const acceptData = {
       "documentReview": {
-        "gov.nc.vax.model.DocumentReview" : {
+        "com.redhat.vax.model.DocumentReview" : {
             "reviewerEmployeeId": reviewerEmployeeId,
             "outcome": outcome,
             "reviewerNotes": rejectReason,
