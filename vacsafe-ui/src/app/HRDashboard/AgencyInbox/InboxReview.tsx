@@ -65,13 +65,12 @@ const InboxReview: React.FunctionComponent = () => {
       headers: headers
     })
     .then(res => {
-      const resData = res.data['task-input-data']['document'];
-      const infoEntries = resData['com.redhat.vax.model.VaccineCardDocument'];
-      const employeeInfo = infoEntries['employee']['com.redhat.vax.model.Employee']
-      const vaccineBrand = infoEntries['vaccineBrand']['com.redhat.vax.model.VaccineBrand']
-      const vaccineShotDate = infoEntries['vaccineAdministrationDate']
+      const document = res.data['task-input-data']['document'];
+      const employeeInfo = document['employee']
+      const vaccineBrand = document['vaccineBrand']
+      const vaccineShotDate = document['vaccineAdministrationDate']
       const dateOfBirth = employeeInfo['dateOfBirth']
-      const resAttachment = infoEntries['attachment']['com.redhat.vax.model.Attachment']
+      const resAttachment = document['attachment']
       setIsCovidReport(false)
       setVaxBrand(vaccineBrand)
       setEmployeeId(employeeInfo['id'])
