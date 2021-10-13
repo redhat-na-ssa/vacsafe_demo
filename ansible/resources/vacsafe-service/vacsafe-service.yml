@@ -21,6 +21,18 @@ items:
       app: {{ application_name }}
     sessionAffinity: None
     type: ClusterIP
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: {{ application_name }}
+    labels:
+      app: {{ application_name }}
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: {{ postgresql_pv_capacity }}
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   metadata:
@@ -121,6 +133,8 @@ items:
             volumeMounts:
             - mountPath: /deployments/config
               name: config
+            - name: "{{ application_name }}-data"
+              mountPath: "{{ vacsafe_local_doc_base_dir }}"
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
@@ -129,6 +143,9 @@ items:
         serviceAccountName: {{ application_name }}
         terminationGracePeriodSeconds: 30
         volumes:
+        - name: "{{ application_name }}-data"
+          persistentVolumeClaim:
+            claimName: "{{ application_name }}"
         - configMap:
             defaultMode: 420
             items:

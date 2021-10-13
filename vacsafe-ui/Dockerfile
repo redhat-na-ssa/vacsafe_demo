@@ -1,6 +1,6 @@
-#  Build:  buildah bud -f vacsafe-ui/Dockerfile -t quay.io/redhat_naps_da/vacsafe-ui:0.0.3 vacsafe-ui
-#  Push:   podman push quay.io/redhat_naps_da/vacsafe-ui:0.0.3
-#  Run  :  podman run -it -p 8080:8080 --rm quay.io/redhat_naps_da/vacsafe-ui:0.0.3
+#  Build:  buildah bud -f vacsafe-ui/Dockerfile -t quay.io/redhat_naps_da/vacsafe-ui:0.0.5 vacsafe-ui
+#  Push:   podman push quay.io/redhat_naps_da/vacsafe-ui:0.0.5
+#  Run  :  podman run -it -p 8080:8080 --rm quay.io/redhat_naps_da/vacsafe-ui:0.0.5
 
 
 # Stage 1: Compile and Build angular codebase
@@ -26,6 +26,9 @@ FROM registry.access.redhat.com/ubi8/nginx-118:1-39
 
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /opt/app-root/src/dist/ .
+
+# Fix bug regarding refresh page with REACT apps
+ADD nginx.conf "${NGINX_CONF_PATH}"
 
 # Expose port
 EXPOSE 8080
