@@ -1,4 +1,10 @@
+:scrollbar:
+:data-uri:
+:toc2:
+:linkattrs:
+
 = Vaccine Safe Demo
+:numbered:
 
 == Purpose
 
@@ -9,6 +15,26 @@ To provide a reproducible demo of a vaccination attestation application that use
 == Deploy to OpenShift
 
 == Demo Scenario
+
+=== Valkyrie
+
+. Users and roles
+.. Pre-populated users (and their corresponding roles and credentials) to facilitate the demo can be found link:https://github.com/redhat-naps-da/vacsafe_demo/blob/main/ansible/resources/sso_realm/realm.json#L111-L436[here].
+.. Certain users are assigned the following administrative roles:
+... *AG-COVIDSafe-Approver*
++
+This role provides the authenticated user with access to the _HR Dashboard_ in the _VacSafe-UI_ web app.
+
+... *VacSafe-APR-<agency>*
++
+This role provides the authenticated user with the ability to manage the lifecycle of administrative tasks (ie: Review Vaccination Records) in their _agency_.
+
+.. For each user listed, make note of the following:
+... *agency*
+... *password credentials*
+... *realmRoles*
+
+. link://https://vacsafe-ui-user3-vacsafe.apps.valkyrie.rhnaps.io/[Vacsafe-UI] 
 
 == Architecture
 

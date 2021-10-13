@@ -1,6 +1,6 @@
-#  Build:  buildah bud -f vacsafe-ui/Dockerfile -t quay.io/redhat_naps_da/vacsafe-ui:0.0.1 vacsafe-ui
-#  Push:   podman push quay.io/redhat_naps_da/vacsafe-ui:0.0.1
-#  Run  :  podman run -it -p 8080:8080 --rm quay.io/redhat_naps_da/vacsafe-ui:0.0.1
+#  Build:  buildah bud -f vacsafe-ui/Dockerfile -t quay.io/redhat_naps_da/vacsafe-ui:0.0.3 vacsafe-ui
+#  Push:   podman push quay.io/redhat_naps_da/vacsafe-ui:0.0.3
+#  Run  :  podman run -it -p 8080:8080 --rm quay.io/redhat_naps_da/vacsafe-ui:0.0.3
 
 
 # Stage 1: Compile and Build angular codebase

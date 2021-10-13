@@ -9,7 +9,7 @@ resources_base_dir: "{{ home_dir }}/resources"
 openshift_cli: oc
 
 # The OCP user that will own all resources in the generated OCP namespace
-project_admin: user1
+project_admin: user3
 
 # Name of the OCP project to deploy this application to
 project_name: "{{ project_admin }}-vacsafe"
