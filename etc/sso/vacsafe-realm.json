@@ -143,6 +143,38 @@
          ]
       },
       {
+         "username":"Susie",
+         "enabled":true,
+         "email":"susie@redhat.com",
+         "firstName" : "Susie",
+         "lastName" : "Garcia",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "IT" ],
+            "division" : [ "div3" ],
+            "workforceid" : [ "workforce21" ]
+         },
+         "credentials":[
+            {
+               "type":"password",
+               "value":"pam"
+            }
+         ],
+         "realmRoles":[
+            "applicant",
+            "kie-server",
+            "user"
+         ],
+         "clientRoles":{
+            "account":[
+               "view-profile",
+               "manage-account"
+            ]
+         },
+         "groups":[
+         ]
+      },
+      {
          "username":"Bill",
          "enabled":true,
          "email":"bill@redhat.com",
@@ -150,9 +182,43 @@
          "lastName" : "Jenkins",
          "attributes" : {
             "birthdate" : [ "03-23-1972" ],
-            "agency" : [ "Dept of Transportation" ],
+            "agency" : [ "Dept_of_Trans" ],
             "division" : [ "div2" ],
             "workforceid" : [ "workforce3" ]
+         },
+         "credentials":[
+            {
+               "type":"password",
+               "value":"pam"
+            }
+         ],
+         "realmRoles":[
+            "applicant",
+            "kie-server",
+            "user",
+            "AG-COVIDSafe-Approver",
+            "VacSafe-APR-Dept_of_Trans"
+         ],
+         "clientRoles":{
+            "account":[
+               "view-profile",
+               "manage-account"
+            ]
+         },
+         "groups":[
+         ]
+      },
+      {
+         "username":"nicole",
+         "enabled":true,
+         "email":"nicole@redhat.com",
+         "firstName" : "Nicole",
+         "lastName" : "Amin",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Dept_of_Trans" ],
+            "division" : [ "div2" ],
+            "workforceid" : [ "workforce31" ]
          },
          "credentials":[
             {
@@ -182,7 +248,7 @@
          "lastName" : "Miranda",
          "attributes" : {
             "birthdate" : [ "03-23-1972" ],
-            "agency" : [ "Dept of Public Health" ],
+            "agency" : [ "Dept_of_Public_Health" ],
             "division" : [ "div2" ],
             "workforceid" : [ "workforce4" ]
          },
@@ -195,7 +261,9 @@
          "realmRoles":[
             "talent-acquisition",
             "kie-server",
-            "user"
+            "user",
+            "AG-COVIDSafe-Approver",
+            "VacSafe-APR-Dept_of_Public_Health"
          ],
          "clientRoles":{
             "account":[
@@ -214,7 +282,7 @@
          "lastName" : "Bentley",
          "attributes" : {
             "birthdate" : [ "03-23-1972" ],
-            "agency" : [ "Finance" ],
+            "agency" : [ "Dept_of_Public_Health" ],
             "division" : [ "div3" ],
             "workforceid" : [ "workforce5" ]
          },
@@ -239,14 +307,14 @@
          ]
       },
       {
-         "username":"Eve",
+         "username":"eve",
          "enabled":true,
          "email":"eve@redhat.com",
          "firstName" : "Eve",
          "lastName" : "Edwards",
          "attributes" : {
             "birthdate" : [ "03-23-1972" ],
-            "agency" : [ "General Inspections" ],
+            "agency" : [ "Parks_and_Wildlife" ],
             "division" : [ "div3" ],
             "workforceid" : [ "workforce6" ]
          },
@@ -257,9 +325,10 @@
             }
          ],
          "realmRoles":[
-            "interviewer",
             "kie-server",
-            "user"
+            "user",
+            "AG-COVIDSafe-Approver",
+            "VacSafe-APR-Parks_and_Wildlife"
          ],
          "clientRoles":{
             "account":[
@@ -271,7 +340,7 @@
          ]
       },
       {
-         "username":"Ann",
+         "username":"ann",
          "enabled":true,
          "email":"ann@redhat.com",
          "firstName" : "Ann",
@@ -289,8 +358,6 @@
             }
          ],
          "realmRoles":[
-            "interviewer",
-            "agent",
             "kie-server",
             "user"
          ],
@@ -311,7 +378,7 @@
          "lastName" : "Reese",
          "attributes" : {
             "birthdate" : [ "03-23-1972" ],
-            "agency" : [ "Land Management" ],
+            "agency" : [ "Land_Management" ],
             "division" : [ "div3" ],
             "workforceid" : [ "workforce8" ]
          },
@@ -322,8 +389,39 @@
             }
          ],
          "realmRoles":[
-            "interviewer",
-            "agent",
+            "kie-server",
+            "user",
+            "AG-COVIDSafe-Approver",
+            "VacSafe-APR-Land_Management"
+         ],
+         "clientRoles":{
+            "account":[
+               "view-profile",
+               "manage-account"
+            ]
+         },
+         "groups":[
+         ]
+      },
+      {
+         "username":"ruth",
+         "enabled":true,
+         "email":"ruth@redhat.com",
+         "firstName" : "Ruth",
+         "lastName" : "Blackwell",
+         "attributes" : {
+            "birthdate" : [ "03-23-1972" ],
+            "agency" : [ "Land_Management" ],
+            "division" : [ "div3" ],
+            "workforceid" : [ "workforce81" ]
+         },
+         "credentials":[
+            {
+               "type":"password",
+               "value":"pam"
+            }
+         ],
+         "realmRoles":[
             "kie-server",
             "user"
          ],
