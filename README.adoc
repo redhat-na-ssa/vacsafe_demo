@@ -12,29 +12,192 @@ To provide a reproducible demo of a vaccination attestation application that use
 
 === Technical Discussion Vectors
 
-== Deploy to OpenShift
+. *Operations*
+.. Ansible for automated and repeatable deployment of Application Services to OpenShift
+
+. *Process Automation*
+.. RH-PAM embedded in SpringBoot as process automation engine
+.. User Task centric process model with Task lifecycle driven by clients via KIE-Server API
+.. React based simple Task Inbox web app 
+.. jBPM _Executor Service_ for _asyncroneous_ tasks
+
+. *Web Security*
+.. Use of OIDC _Authorization Code Flow_ protocol between RH-SSO and Angular web app to obtain JWT based access token
+.. Access token includes users roles so as to facilitate UserGroupCallback functionality in RH-PAM
+.. KIE-Server APIs of RH-PAM secured via RH-SSO  as Bearer-Token endpoints
+
+. *Polyglot Frameworks*
+.. SpringBoot
+.. ReactJS
+
+
+== Deploy to OpenShift using Ansible
+
+. OpenShift Container Platform version 4.7.* or more recent. Resource requirements needed by the app (doesn’t include resource requirements of Openshift to support itself) is as follows:
+
+.. RAM: 6 GB
+
+.. CPU: 8
+
+.. Storage: 10 PVCs of type RWO (no RWX requirement) and each of size 5 GiB
+
+. cluster-admin credentials to this OpenShift cluster are needed
+
+. Corresponding oc utility installed locally
++
+All versions of this utility are available at either of the following:
+
+.. https://access.redhat.com/downloads/content/290
++
+RHN subscription required
+
+.. https://mirror.openshift.com/pub/openshift-v4/clients/ocp/?C=M;O=D
++
+Accessible without a RHN subscription
+
+. ansible installed locally
++
+ie: dnf install ansible
+
+. git installed locally
+
+=== Procedure:
+
+. Using the oc utility that corresponds to the version of OpenShift that you will deploy to, log into the cluster:
++
+-----
+$ oc login <OCP API Server url> -u <cluster-admin userId> -p <passwd>
+-----
+
+. Clone the source code of this project:
++
+-----
+$ git clone https://github.com/redhat-naps-da/vacsafe_demo
+-----
+
+. Change to the ansible directory of this project:
++
+-----
+$ cd vacsafe_demo/ansible
+-----
+
+. Deploy to OpenShift:
++
+-----
+$ ansible-playbook playbooks/install.yml
+-----
+
+.. Deployment should complete in about 10 minutes.
+
+.. Notice the creation of a new OCP namespace where the application resides: _user1-vacsafe_
+
+.. At the completion of the installation, expect to see messages similar to the following:
++
+-----
+PLAY RECAP *******************************************************************************************************************************************************************************************************
+    localhost                  :  ok=137  changed=77   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
+-----
+
+. Optional: Uninstall from OpenShift:
++
+-----
+$ ansible-playbook playbooks/uninstall.yml
+-----
+
 
 == Demo Scenario
 
-=== Valkyrie
+=== Users and Roles
 
-. Users and roles
-.. Pre-populated users (and their corresponding roles and credentials) to facilitate the demo can be found link:https://github.com/redhat-naps-da/vacsafe_demo/blob/main/ansible/resources/sso_realm/realm.json#L111-L436[here].
+. Pre-populated users (and their corresponding roles and credentials) to facilitate the demo can be found link:https://github.com/redhat-naps-da/vacsafe_demo/blob/main/ansible/resources/sso_realm/realm.json#L111-L436[here].
 .. Certain users are assigned the following administrative roles:
-... *AG-COVIDSafe-Approver*
+.. *AG-COVIDSafe-Approver*
 +
 This role provides the authenticated user with access to the _HR Dashboard_ in the _VacSafe-UI_ web app.
 
-... *VacSafe-APR-<agency>*
+.. *VacSafe-APR-<agency>*
 +
 This role provides the authenticated user with the ability to manage the lifecycle of administrative tasks (ie: Review Vaccination Records) in their _agency_.
 
-.. For each user listed, make note of the following:
-... *agency*
-... *password credentials*
-... *realmRoles*
+. For each user listed, make note of the following:
+.. *agency*
+.. *password credentials*
+.. *realmRoles*
 
-. link://https://vacsafe-ui-user3-vacsafe.apps.valkyrie.rhnaps.io/[Vacsafe-UI] 
+=== Vacsafe UI
+
+. From the OpenShift console, navigate to the route of the _vacsafe-ui_ application
++
+image::docs/ocp_select_ui_route.png[]
+
+. Accept the _End User Licensing Agreement
++
+image::docs/eula.png[]
+
+=== Submit Attestations
+
+. From the list of link:https://github.com/redhat-naps-da/vacsafe_demo/blob/main/ansible/resources/sso_realm/realm.json#L111-L436[pre-populated users], log into the Vacsafe UI as an employee that is not an admin of their agency.
++
+NOTE:  Make note of the _agency_ of that user.
+
+. Add or adjust any of your _Profile_ fields and click _Accept_ :
++
+image::docs/profile.png[]
+
+. Submit either a _Vaccination Record_ or a _COVID Test Result_
++
+image::docs/employee_menu.png[]
+
+.. If submitting a Vaccination Record, ensure you have selected the Vaccine Type, the dates for the first and second (if applicable) shots and uploaded an image of your vaccination record:
++
+image::docs/vax_submit_form.png[]
+
+.. If submitting a Test Result, ensure you have selected the Test Results, Test Date and uploaded an image of your test result:
++
+image::docs/test_submit_form.png[]
+
+. After completion of either of the above, you'll be prompted to log out
+
+
+=== Review Attestations 
+
+. From the list of link:https://github.com/redhat-naps-da/vacsafe_demo/blob/main/ansible/resources/sso_realm/realm.json#L111-L436[pre-populated users], log into the Vacsafe UI as an admin of the same agency of the employee you just previously logged in as.
+. Complete your profile as necessary and navigate to the _HR Dashboard_ page.
++
+image::docs/admin_menu.png[]
+
+.. As an admin of an agency, you are provided with several mechanisms to review any attestations from employees in your agency.
+
+... *Agency Inbox*
++
+This approach will allow for reviewing vaccine attestation submittals:
++
+image::docs/agency_inbox.png[]
+
+.... Select the task and review the vaccination record
+.... At the bottom of the review page, _Accept_ or _Decline_ the Vaccination Record.
+.... If you _Decline_ the submission, submit the most appropriate reason from the pop-up:
++
+image::docs/decline_reasons.png[]
+
+... *VCS Search*
++
+This approach  will provide a complete case history list for a specific employee.
+
+.... Locate the _workforceId_ of an employee and then search by it
++
+image::docs/vsc_search.png[]
+
+.... From the _Attestation Records_ panel, select any _Test Result_ or _Vaccination Records_ submittals for that employee.
++
+image::docs/case_history_select.png[]
+
+.... If needed, you can click the button at the bottom of the page to _Update Record_.
++
+From the pop-up, you have the ability to update the record as a vaccine submission, test submission or grant an exception:
++
+image::docs/update_record.png[]
+
 
 == Architecture
 
@@ -264,6 +427,11 @@ podman run -d -it --rm \
 
 
 == Reference
+
+=== Valkyrie
+
+. link://https://vacsafe-ui-user3-vacsafe.apps.valkyrie.rhnaps.io/[Vacsafe-UI] 
+
 
 == Bug List
 
