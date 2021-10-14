@@ -33,6 +33,8 @@ To provide a reproducible demo of a vaccination attestation application that use
 
 == Deploy to OpenShift using Ansible
 
+=== Pre-reqs
+
 . OpenShift Container Platform version 4.7.* or more recent. Resource requirements needed by the app (doesn’t include resource requirements of Openshift to support itself) is as follows:
 
 .. RAM: 6 GB
