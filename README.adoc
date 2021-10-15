@@ -356,6 +356,8 @@ $ echo -en "\n$VACSAFE_SERVICE_URL/rest/api-docs?url=$VACSAFE_SERVICE_URL/rest/s
 -----
 $ curl -H "Authorization: Bearer $TKN" -X GET $VACSAFE_SERVICE_URL/rest/server/containers
 -----
++
+image::docs/swagger-ui.png[]
 
 . List process definitions in JSON representation:
 +
