@@ -15,9 +15,7 @@ services:
       POSTGRESQL_MAX_PREPARED_TRANSACTIONS: 10
       SCRIPT_DIR: /opt/sql
     volumes:
-      - type: bind
-        source: ./sso/db/sso-psql.conf
-        target: /opt/app-root/src/postgresql-cfg/sso-psql.conf
+    - ./sso/db/sso-psql.conf:/opt/app-root/src/postgresql-cfg/sso-psql.conf:bind
     networks:
       - app
 
@@ -42,9 +40,7 @@ services:
       SSO_ADMIN_PASSWORD: master
       JAVA_OPTS_APPEND: -Dkeycloak.migration.strategy=IGNORE_EXISTING -Dkeycloak.import=/opt/vacsafe-realm.json
     volumes:
-      - type: bind
-        source: ./sso/vacsafe-realm.json
-        target: /opt/vacsafe-realm.json
+    - ./sso/vacsafe-realm.json:/opt/vacsafe-realm.json:bind
     depends_on:
       - psql-sso
     networks:
@@ -64,15 +60,9 @@ services:
       POSTGRESQL_MAX_PREPARED_TRANSACTIONS: 10
       SCRIPT_DIR: /opt/sql
     volumes:
-      - type: bind
-        source: ./vacsafe-service/rhpam-psql.conf
-        target: /opt/app-root/src/postgresql-cfg/rhpam-psql.conf
-      - type: bind
-        source: ./vacsafe-service/ddl-scripts/postgresql/
-        target: /opt/sql
-      - type: bind
-        source: ./vacsafe-service/create_rhpam_database.sh
-        target: /opt/app-root/src/postgresql-start/create_rhpam_database.sh
+    - ./vacsafe-service/rhpam-psql.conf:/opt/app-root/src/postgresql-cfg/rhpam-psql.conf:bind
+    - ./vacsafe-service/ddl-scripts/postgresql/:/opt/sql/:bind
+    - ./vacsafe-service/create_rhpam_database.sh:/opt/app-root/src/postgresql-start/create_rhpam_database.sh:bind
     networks:
       - app
 
@@ -94,9 +84,7 @@ services:
       # Optional: Change to URL of Nexus (if in use)
 #      MAVEN_MIRROR_URL: ''
 #    volumes:
-#      - type: bind
-#        source: ./vacsafe-service/runtime_configs
-#        target: /deployments/config/
+#    - ./vacsafe-service/runtime_configs:/deployments/config/:bind
 #    depends_on:
 #      - psql-vacsafe
 #      - sso-service
