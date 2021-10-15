@@ -949,7 +949,8 @@
          "clientAuthenticatorType":"client-secret",
          "secret":"**********",
          "redirectUris":[
-             "{{ vacsafe_ui_route_url }}/*"
+             "{{ vacsafe_ui_route_url }}/*",
+             "{{ vacsafe_service_route_url }}/*"
          ],
          "webOrigins":[
             "+"

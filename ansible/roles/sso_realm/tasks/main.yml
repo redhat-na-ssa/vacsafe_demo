@@ -49,6 +49,7 @@
     sso_admin_password: "{{ sso_admin_credentials.ansible_module_results.decoded[\"ADMIN_PASSWORD\"] }}"
     sso_url: "https://{{ sso_route_cmd.stdout }}"
     vacsafe_ui_route_url: "https://{{ vacsafe_ui_app_name }}-{{ project_name }}.{{ ocp_domain }}"
+    vacsafe_service_route_url: "https://{{ vacsafe_service }}-{{ project_name }}.{{ ocp_domain }}"
 
 - name: get admin token
   uri:
