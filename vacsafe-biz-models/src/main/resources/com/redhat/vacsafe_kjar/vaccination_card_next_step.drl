@@ -1,0 +1,120 @@
+package com.redhat.vacsafe_kjar;
+
+import com.redhat.vax.model.VaccineCardDocument
+import com.redhat.vax.model.DocumentReviewOutcome
+import com.redhat.vax.model.VaccineBrand
+
+// - pfizer/moderna 2 shots within time frame => fully vax
+// - j&j 1 shot => fully vax
+// - pfizer/moderna 1 shot => additional shot req.
+// - booster shot rules => additional shot req.
+// - Issues
+//      - 1 shot different from 2 shot
+//      - vax shots time frame not respected
+//      - etc.
+
+//FIXME workflow may throw exception at the gateway
+
+rule "Echo facts"
+ruleflow-group "vax-card-next-step"
+when
+    $o : Object()
+then
+    System.out.println(">>>>>> [BR] Fact: " + $o);
+end
+
+
+// Johnson & Johnson
+rule "JOHNSON & JOHNSON - fully vaccinated"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument(
+        vaccineBrand == VaccineBrand.JOHNSON,
+        vaxDate: vaccineAdministrationDate,
+        KjarUtils.numberOfDaysElapsed(vaxDate) >= 14)
+    r: VaxBusinessRulesOutcome()
+then
+    r.setFullyVaccinated(true);
+end
+
+// JANSSEN
+rule "JANSSEN - fully vaccinated"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument(
+        vaccineBrand == VaccineBrand.JANSSEN,
+        vaxDate: vaccineAdministrationDate,
+        KjarUtils.numberOfDaysElapsed(vaxDate) >= 14)
+    r: VaxBusinessRulesOutcome()
+then
+    r.setFullyVaccinated(true);
+end
+
+// MODERNA - fully vaccinated
+rule "MODERNA - fully vaccinated"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument(
+        vaccineBrand == VaccineBrand.MODERNA, 
+        vaccineShotNumber > 1,
+        vaxDate: vaccineAdministrationDate,
+        KjarUtils.numberOfDaysElapsed(vaxDate) >= 14)
+    r: VaxBusinessRulesOutcome()
+then
+    r.setFullyVaccinated(true);
+end
+
+// PFIZER - fully vaccinated
+rule "PFIZER - fully vaccinated"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument(
+        vaccineBrand == VaccineBrand.PFIZER, 
+        vaccineShotNumber > 1,
+        vaxDate: vaccineAdministrationDate,
+        KjarUtils.numberOfDaysElapsed(vaxDate) >= 14)
+    r: VaxBusinessRulesOutcome()
+then
+    r.setFullyVaccinated(true);
+end
+
+
+rule "ASTRAZENECA - fully vaccinated"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument(
+        vaccineBrand == VaccineBrand.ASTRAZENECA, 
+        vaccineShotNumber > 1,
+        vaxDate: vaccineAdministrationDate,
+        KjarUtils.numberOfDaysElapsed(vaxDate) >= 14)
+    r: VaxBusinessRulesOutcome()
+then
+    r.setFullyVaccinated(true);
+end
+
+rule "NOVAVAX - fully vaccinated"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument(
+        vaccineBrand == VaccineBrand.NOVAVAX, 
+        vaccineShotNumber > 1,
+        vaxDate: vaccineAdministrationDate,
+        KjarUtils.numberOfDaysElapsed(vaxDate) >= 14)
+    r: VaxBusinessRulesOutcome()
+then
+    r.setFullyVaccinated(true);
+end
+
+
+//Demo purpose only
+// Report issue when invalid shot number is provided
+// PFIZER - fully vaccinated
+//TODO: Check administration date and existence of previous shots records
+rule "Invalid shot number"
+ruleflow-group "vax-card-next-step"
+when
+    d: VaccineCardDocument( vaccineShotNumber < 1 || vaccineShotNumber > 2)
+    r: VaxBusinessRulesOutcome()
+then
+    r.addIssue("Invalid shout number # " + d);
+end

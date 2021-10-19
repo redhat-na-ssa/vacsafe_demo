@@ -1,0 +1,17 @@
+[
+  [
+    "name" : "CustomEmail",
+    "displayName" : "Email",
+    "parameters" : [
+      "ScheduleDate"   : new StringDataType(),
+      "Recipients"     : new StringDataType(),
+      "Template"       : new StringDataType(),
+      "TemplateParam1" : new StringDataType(),
+      "TemplateParam2" : new StringDataType(),
+      "TemplateParam3" : new StringDataType(),
+      "TemplateParam4" : new StringDataType(),
+      "TemplateParam5" : new StringDataType()
+    ],
+    "icon" : "defaultemailicon.png"
+  ]
+]
