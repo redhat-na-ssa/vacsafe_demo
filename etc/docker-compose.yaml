@@ -67,7 +67,7 @@ services:
       - app
 
 #  vacsafe-service:
-#    image: quay.io/redhat_naps_da/vacsafe-service:0.0.1
+#    image: quay.io/redhat_naps_da/vacsafe-service:0.0.5
 #    restart: always
 #    ports:
 #      - "9080:9080"

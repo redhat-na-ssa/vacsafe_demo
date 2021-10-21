@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import software.amazon.awssdk.services.s3.model.Bucket;
 
-//@Ignore
+@Ignore
 @RunWith(SpringRunner.class)
 @Import(TestContextConfiguration.class)
 @PropertySource("classpath:application.properties")
