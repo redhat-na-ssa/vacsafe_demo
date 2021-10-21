@@ -203,7 +203,17 @@ image::docs/update_record.png[]
 
 == Architecture
 
-== Demo Components
+== APIs
+
+The _VacSafe Service_ exposes the following categories of APIs: 
+
+. *RH-PAM KIE-Server APIs*
+
+. *ApiController*
++
+This API allows for an HTTP POST to the following url:  $VACSAFE_SERVICE_URL/api/employee
+
+. **
 
 == Local Containerized environment
 
@@ -234,11 +244,13 @@ $ docker-compose -f etc/docker-compose.yaml down
 
 == Test
 
+The purpose of this section is to provide command line based test examples.
+
 === Environment Variables
 
 Set the following environment variables with values similar to the following:
 
-. if testing locally deployed application (via docker-compose):
+. If testing locally deployed application (via docker-compose):
 +
 -----
 RHSSO_URL=http://localhost:8080
@@ -337,27 +349,44 @@ $ curl -v \
 $ curl -H "Authorization: Bearer $TKN" -H 'Accept:application/json' $VACSAFE_SERVICE_URL/rest/server/healthcheck?report=true
 -----
 
-. View swagger
+. View KIE-Server Swagger
 +
 -----
 $ curl -v -H "Authorization: Bearer $TKN" $VACSAFE_SERVICE_URL/rest/swagger.json | jq .
 -----
 
-. View Swagger UI
+. View KIE-Server Swagger UI
 +
 Point your browser to the output of the following:
 +
 -----
 $ echo -en "\n$VACSAFE_SERVICE_URL/rest/api-docs?url=$VACSAFE_SERVICE_URL/rest/swagger.json\n"
 -----
++
+image::docs/swagger-ui.png[]
+
+. View OpenAPI Docs for SpringBoot based RESTful APIs:
++
+-----
+$ curl -v -H "Authorization: Bearer $TKN" $VACSAFE_SERVICE_URL/v3/api-docs | jq .
+-----
+
+. View Swagger UI for SpringBoot based RESTful APIs:
++
+Point your browser to the output of the following:
++
+-----
+$ echo -en "\n$VACSAFE_SERVICE_URL/swagger-ui.html\n"
+-----
++
+image::docs/springboot-swagger-ui.png[]
 
 . List KIE Containers
 +
 -----
 $ curl -H "Authorization: Bearer $TKN" -X GET $VACSAFE_SERVICE_URL/rest/server/containers
 -----
-+
-image::docs/swagger-ui.png[]
+
 
 . List process definitions in JSON representation:
 +
@@ -376,7 +405,7 @@ $ curl -v -H "Authorization: Bearer $TKN" \
 -----
 
 
-== Development
+== Demo Development
 
 . Build and start vacsafe app :
 +
@@ -395,48 +424,14 @@ $ mvn clean test \
      -Daws.secretAccessKey=$AWS_SECRET_ACCESS_KEY
 -----
 
------
-$ podman network create app
 
-podman run -d -it --rm \
-             --name psql-sso \
-             --network=app \
-             -p 4432:4432 \
-             --mount 'type=bind,src=./etc/sso/db/sso-psql.conf,dst=/opt/app-root/src/postgresql-cfg/sso-psql.conf' \
-             -e PGPORT=4432 -e POSTGRESQL_USER=sso -e POSTGRESQL_PASSWORD=sso -e POSTGRESQL_DATABASE=sso -e SCRIPT_DIR=/opt/sql \
-             registry.redhat.io/rhel8/postgresql-12:1-72.1626836556 
-
-podman run -d -it --rm \
-           --name sso-service \
-           --network=app \
-           -p 127.0.0.1:8080:8080 \
-           -p 127.0.0.1:8443:8443 \
-           --mount 'type=bind,src=./etc/sso/vacsafe-realm.json,dst=/opt/vacsafe-realm.json' \
-           -e SSO_POSTGRESQL_SERVICE_HOST=psql-sso -e SSO_POSTGRESQL_SERVICE_PORT=4432 -e DB_SERVICE_PREFIX_MAPPING="sso-postgresql=DB" -e DB_JNDI="java:jboss/datasources/KeycloakDS" \
-           -e DB_USERNAME=sso -e DB_PASSWORD=sso -e DB_DATABASE=sso -e TX_DATABASE_PREFIX_MAPPING="sso-postgresql=DB" -e DB_MIN_POOL_SIZE=5 -e DB_MAX_POOL_SIZE=10 \
-           -e SSO_ADMIN_USERNAME=master -e SSO_ADMIN_PASSWORD=master -e JAVA_OPTS_APPEND="-Dkeycloak.migration.strategy=IGNORE_EXISTING -Dkeycloak.import=/opt/vacsafe-realm.json" \
-           registry.redhat.io/rh-sso-7/sso74-openshift-rhel8:7.4-36
-        
-podman run -d -it --rm \
-             --name psql-vacsafe \
-             --network=app \
-             -p 6432:6432 \
-             --mount 'type=bind,src=./etc/vacsafe-service/rhpam-psql.conf,dst=/opt/app-root/src/postgresql-cfg/rhpam-psql.conf' \
-             --mount 'type=bind,src=./etc/vacsafe-service/ddl-scripts/postgresql/,dst=/opt/sql' \
-             --mount 'type=bind,src=./etc/vacsafe-service/create_rhpam_database.sh,dst=/opt/app-root/src/postgresql-start/create_rhpam_database.sh' \
-             -e PGPORT=6432 -e POSTGRESQL_USER=rhpam -e POSTGRESQL_PASSWORD=rhpam -e POSTGRESQL_DATABASE=rhpam -e POSTGRESQL_MAX_PREPARED_TRANSACTIONS=10 -e SCRIPT_DIR=/opt/sql \
-             registry.redhat.io/rhel8/postgresql-12:1-72.1626836556 
-
------
-
-
-== Reference
+== Appendix
 
 === Valkyrie
 
 . link://https://vacsafe-ui-user3-vacsafe.apps.valkyrie.rhnaps.io/[Vacsafe-UI] 
 
 
-== Bug List
+=== Bug List
 
-== Operator Notes
+=== Operator Notes
