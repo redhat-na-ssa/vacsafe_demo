@@ -71,7 +71,7 @@ $ oc login <OCP API Server url> -u <cluster-admin userId> -p <passwd>
 . Install all needed VacSafe Operator related resources:
 +
 -----
-$ oc apply -f
+$ oc apply -f https://raw.githubusercontent.com/redhat-naps-da/vacsafe_demo/main/ansible/rhpds/vacsafe-operator-all-configs.yml
 -----
 
 .. Wait about 15 seconds
@@ -80,14 +80,16 @@ $ oc apply -f
 -----
 $ oc get pod -n ansible-system
 
+
+NAME                                          READY   STATUS    RESTARTS   AGE
+ansible-controller-manager-5494875845-lcj5g   2/2     Running   0          31m
 -----
 
 . Install a VacSafe custom resource:
 +
 -----
-$
+$ oc apply -f https://raw.githubusercontent.com/redhat-naps-da/vacsafe_demo/main/ansible/rhpds/cache_v1alpha1_vacsafe.yaml
 -----
-
 
 .. Deployment should complete in about 10 minutes.
 .. Notice the creation of a new OCP namespace where RH-SSO is installed: _vacsafe-sso_
@@ -100,20 +102,11 @@ $
 $ oc logs -f -n ansible-system -c manager `oc get pod -n ansible-system | grep "^ansible" | awk '{print $1}'`
 -----
 
-
-.. Notice the creation of a new OCP namespace where the application resides: _user1-vacsafe_
-
 .. At the completion of the installation, expect to see messages similar to the following:
 +
 -----
 PLAY RECAP *******************************************************************************************************************************************************************************************************
 localhost                  : ok=102  changed=58   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
------
-
-. Optional: Uninstall from OpenShift:
-+
------
-$ ansible-playbook playbooks/uninstall.yml
 -----
 
 
@@ -481,6 +474,9 @@ $ ./bin/kustomize build config/default > rhpds/vacsafe-operator-all-configs.yml
 $ cp config/samples/cache_v1alpha1_vacsafe.yaml rhpds/
 -----
 
+=== Install directly from project ansible
+
+NOTE:  this is section is only relevant to demo contributors who need to modify & test the project's ansible.
 
 . Clone the source code of this project:
 +
@@ -498,5 +494,11 @@ $ cd vacsafe_demo/ansible
 +
 -----
 $ ansible-playbook playbooks/install.yml
+-----
+
+. Optional: Uninstall from OpenShift:
++
+-----
+$ ansible-playbook playbooks/uninstall.yml
 -----
 
