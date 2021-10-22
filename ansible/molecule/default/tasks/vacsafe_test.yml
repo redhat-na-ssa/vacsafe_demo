@@ -1,5 +1,5 @@
 ---
-- name: Create the cache.redhat.com/v1alpha1.HIMSS2021
+- name: Create the cache.redhat.com/v1alpha1.VACSAFE
   k8s:
     state: present
     namespace: '{{ namespace }}'
@@ -11,7 +11,7 @@
       reason: Successful
       status: "True"
   vars:
-    cr_file: 'cache_v1alpha1_himss2021.yaml'
+    cr_file: 'cache_v1alpha1_vacsafe.yaml'
 
 - name: Add assertions here
   assert:

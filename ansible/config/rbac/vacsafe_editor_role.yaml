@@ -1,20 +1,24 @@
-# permissions for end users to view himss2021s.
+# permissions for end users to edit vacsafes.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: himss2021-viewer-role
+  name: vacsafe-editor-role
 rules:
 - apiGroups:
   - cache.redhat.com
   resources:
-  - himss2021s
+  - vacsafes
   verbs:
+  - create
+  - delete
   - get
   - list
+  - patch
+  - update
   - watch
 - apiGroups:
   - cache.redhat.com
   resources:
-  - himss2021s/status
+  - vacsafes/status
   verbs:
   - get

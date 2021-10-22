@@ -13,6 +13,6 @@ sso_operator_csv_prefix: rhsso-operator
 keycloak_cr_template: keycloak-cr.yml
 keycloak_route_template: keycloak-route.yml
 
-vacsafe_theme_extension: https://github.com/redhat-naps-da/himss_interoperability_showcase_2021/releases/download/0.0.1/vacsafe-theme-0.0.1.jar
+vacsafe_theme_extension:
 
 vacsafe_approver_role: AG-COVIDSafe-Approver

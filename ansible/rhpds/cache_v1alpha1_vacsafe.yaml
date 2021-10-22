@@ -1,0 +1,8 @@
+apiVersion: cache.redhat.com/v1alpha1
+kind: VACSAFE
+metadata:
+  name: vacsafe-sample
+  namespace: ansible-system
+spec:
+  # Add fields here
+  foo: bar

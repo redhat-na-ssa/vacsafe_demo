@@ -2,5 +2,5 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/cache.redhat.com_himss2021s.yaml
+- bases/cache.redhat.com_vacsafes.yaml
 #+kubebuilder:scaffold:crdkustomizeresource

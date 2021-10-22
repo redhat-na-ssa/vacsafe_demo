@@ -2,20 +2,20 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: himss2021s.cache.redhat.com
+  name: vacsafes.cache.redhat.com
 spec:
   group: cache.redhat.com
   names:
-    kind: HIMSS2021
-    listKind: HIMSS2021List
-    plural: himss2021s
-    singular: himss2021
+    kind: VACSAFE
+    listKind: VACSAFEList
+    plural: vacsafes
+    singular: vacsafe
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: HIMSS2021 is the Schema for the himss2021s API
+        description: VACSAFE is the Schema for the vacsafes API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -30,11 +30,11 @@ spec:
           metadata:
             type: object
           spec:
-            description: Spec defines the desired state of HIMSS2021
+            description: Spec defines the desired state of VACSAFE
             type: object
             x-kubernetes-preserve-unknown-fields: true
           status:
-            description: Status defines the observed state of HIMSS2021
+            description: Status defines the observed state of VACSAFE
             type: object
             x-kubernetes-preserve-unknown-fields: true
         type: object

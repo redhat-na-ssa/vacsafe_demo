@@ -6,7 +6,7 @@ plugins:
   scorecard.sdk.operatorframework.io/v2: {}
 
 # JA Bride
-projectName: himss2021-operator
+projectName: vacsafe-operator
 
 resources:
 - api:
@@ -14,6 +14,6 @@ resources:
     namespaced: true
   domain: redhat.com
   group: cache
-  kind: HIMSS2021
+  kind: VACSAFE
   version: v1alpha1
 version: "3"

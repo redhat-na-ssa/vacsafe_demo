@@ -31,7 +31,9 @@ To provide a reproducible demo of a vaccination attestation application that use
 .. ReactJS
 
 
-== Deploy to OpenShift using Ansible
+== Deploy to OpenShift
+
+Ansible based operator is included to deploy this application to OpenShift in a repeatable manner.
 
 === Pre-reqs
 
@@ -57,11 +59,6 @@ RHN subscription required
 +
 Accessible without a RHN subscription
 
-. ansible installed locally
-+
-ie: dnf install ansible
-
-. git installed locally
 
 === Procedure:
 
@@ -71,25 +68,38 @@ ie: dnf install ansible
 $ oc login <OCP API Server url> -u <cluster-admin userId> -p <passwd>
 -----
 
-. Clone the source code of this project:
+. Install all needed VacSafe Operator related resources:
 +
 -----
-$ git clone https://github.com/redhat-naps-da/vacsafe_demo
+$ oc apply -f
 -----
 
-. Change to the ansible directory of this project:
+.. Wait about 15 seconds
+.. Notice a pod similar to the following in the _ansible-system_ namespace:
 +
 -----
-$ cd vacsafe_demo/ansible
+$ oc get pod -n ansible-system
+
 -----
 
-. Deploy to OpenShift:
+. Install a VacSafe custom resource:
 +
 -----
-$ ansible-playbook playbooks/install.yml
+$
 -----
+
 
 .. Deployment should complete in about 10 minutes.
+.. Notice the creation of a new OCP namespace where RH-SSO is installed: _vacsafe-sso_
+
+.. Notice the creation of a new OCP namespace where the application resides: _user1-vacsafe_
+
+.. You can tail the log of the VACSAFE operator as follows to monitor progress:
++
+-----
+$ oc logs -f -n ansible-system -c manager `oc get pod -n ansible-system | grep "^ansible" | awk '{print $1}'`
+-----
+
 
 .. Notice the creation of a new OCP namespace where the application resides: _user1-vacsafe_
 
@@ -97,7 +107,7 @@ $ ansible-playbook playbooks/install.yml
 +
 -----
 PLAY RECAP *******************************************************************************************************************************************************************************************************
-    localhost                  :  ok=137  changed=77   unreachable=0    failed=0    skipped=14   rescued=0    ignored=0
+localhost                  : ok=102  changed=58   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
 -----
 
 . Optional: Uninstall from OpenShift:
@@ -435,3 +445,58 @@ $ mvn clean test \
 === Bug List
 
 === Operator Notes
+
+=== Reference
+. link:https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/[ansible operator tutorial]
+
+. link:https://quay.io/repository/redhat_naps_da/vacsafe-operator?tab=tags[VacSafe Operator Image Tags]
+
+=== Development
+
+==== Base Operator
+. Modify Makefile (as needed)
+. Build image and deploy to quay:
++
+-----
+$ make docker-build docker-push
+-----
+
+. Deploy operator in OpenShift cluster:
++
+-----
+$ make deploy
+----
+
+. Install VACSAFE resource
++
+-----
+$ oc apply -f config/samples/cache_v1alpha1_vacsafe.yaml -n ansible-system
+-----
+
+. Acquire needed configs for use in RHPDS:
++
+-----
+$ mkdir rhpds
+$ ./bin/kustomize build config/default > rhpds/vacsafe-operator-all-configs.yml
+$ cp config/samples/cache_v1alpha1_vacsafe.yaml rhpds/
+-----
+
+
+. Clone the source code of this project:
++
+-----
+$ git clone https://github.com/redhat-naps-da/vacsafe_demo
+-----
+
+. Change to the ansible directory of this project:
++
+-----
+$ cd vacsafe_demo/ansible
+-----
+
+. Deploy to OpenShift:
++
+-----
+$ ansible-playbook playbooks/install.yml
+-----
+
