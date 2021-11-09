@@ -13,4 +13,9 @@ public class TestContextConfiguration {
         return new S3Service();
     }
 
+    @Bean
+    public QRCodeService qrCodeService() {
+        return new QRCodeService();
+    }
+
 }

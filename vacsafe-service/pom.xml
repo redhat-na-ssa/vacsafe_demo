@@ -24,6 +24,7 @@
     <cxf.version>3.2.14</cxf.version>
     <version.org.keycloak>9.0.15.redhat-00002</version.org.keycloak>
     <vacsafe.kjar.version>0.0.1</vacsafe.kjar.version>
+    <zxing.version>3.4.1</zxing.version>
   </properties>
 
 
@@ -120,6 +121,18 @@
         <groupId>org.springdoc</groupId>
         <artifactId>springdoc-openapi-ui</artifactId>
         <version>1.5.2</version>
+    </dependency>
+
+    <!-- QR Code -->
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>core</artifactId>
+        <version>${zxing.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.zxing</groupId>
+        <artifactId>javase</artifactId>
+        <version>${zxing.version}</version>
     </dependency>
 
     <dependency>
